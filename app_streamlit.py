@@ -411,43 +411,35 @@ def page_tentang_saya():
     </div>
     """, unsafe_allow_html=True)
 
-    col1, col2 = st.columns([1, 1.4], gap="large")
+    col1, col2 = st.columns([1, 1.5], gap="large")
 
     with col1:
-    st.image(PROFILE_IMG, width=200)
+        if os.path.exists(PROFILE_IMG):
+            st.image(PROFILE_IMG, width=220)
+        else:
+            st.warning("Foto profile tidak ditemukan")
 
-with col2:
-    st.markdown("<div class='section-title'>📋 Informasi Pribadi</div>", unsafe_allow_html=True)
+    with col2:
+        st.markdown("<div class='section-title'>📋 Informasi Pribadi</div>", unsafe_allow_html=True)
 
-    """, unsafe_allow_html=True)
-        
-            <a href='mailto:saffadhiyaa1012@gmail.com' class='social-icon' title='Email'>✉️</a>
-            <a href='https://github.com/dhhyaauu' target='_blank' class='social-icon' title='Github'>🐙</a>
-            <a href='#' class='social-icon' title='Instagram'>📷</a>
+        st.markdown("""
+        <div class='profile-card'>
+          <div class='profile-name'>Saffa Dhiya Ur Rahma</div>
+          <div class='profile-role'>Rekayasa Perangkat Lunak</div>
+          <p style='color:#64748b; font-size:0.95rem; line-height:1.6;'>
+            Passionate dalam <b>Data Science</b> & <b>Machine Learning</b>.
+            Menyukai eksplorasi data, membangun model prediksi, dan
+            merancang dashboard analitik yang informatif.
+          </p>
+
+          <div style='margin-top:1.25rem;'>
+            <a href='mailto:saffadhiyaa1012@gmail.com' class='social-icon'>✉️</a>
+            <a href='https://github.com/dhhyaauu' target='_blank' class='social-icon'>🐙</a>
+            <a href='#' class='social-icon'>📷</a>
           </div>
         </div>
         """, unsafe_allow_html=True)
 
-    with col2:
-        st.markdown("<div class='section-title'>📋 Informasi Pribadi</div>", unsafe_allow_html=True)
-st.image(PROFILE_IMG, width=200)
-
-st.markdown("""
-<div class='profile-card'>
-  <div class='profile-name'>Saffa Dhiya Ur Rahma</div>
-  <div class='profile-role'>Rekayasa Perangkat Lunak</div>
-  <p style='color:#64748b; font-size:0.95rem; line-height:1.6;'>
-    Passionate dalam <b>Data Science</b> & <b>Machine Learning</b>.
-    Menyukai eksplorasi data, membangun model prediksi, dan
-    merancang dashboard analitik yang informatif.
-  </p>
-  <div style='margin-top:1.25rem;'>
-    <a href='mailto:saffadhiyaa1012@gmail.com' class='social-icon'>✉️</a>
-    <a href='https://github.com/dhhyaauu' target='_blank' class='social-icon'>🐙</a>
-    <a href='#' class='social-icon'>📷</a>
-  </div>
-</div>
-""", unsafe_allow_html=True)
         info_items = [
             ("👤", "Nama Lengkap", "Saffa Dhiya Ur Rahma"),
             ("🎓", "Jurusan", "Rekayasa Perangkat Lunak"),
@@ -455,19 +447,25 @@ st.markdown("""
             ("🔗", "Github", "github.com/dhhyaauu"),
             ("💡", "Minat", "Data Science • Machine Learning • Web Dev"),
         ]
+
         for icon, label, val in info_items:
             st.markdown(f"""
             <div class='premium-card' style='display:flex;align-items:center;gap:1rem;padding:1.2rem 1.5rem;'>
               <div style='font-size:1.6rem;width:48px;height:48px;background:#eef2f7;
-                          border-radius:12px;display:flex;align-items:center;justify-content:center;'>{icon}</div>
+                          border-radius:12px;display:flex;align-items:center;justify-content:center;'>
+                {icon}
+              </div>
               <div>
                 <div style='color:#64748b;font-size:0.78rem;text-transform:uppercase;
-                            letter-spacing:0.5px;font-weight:600;'>{label}</div>
-                <div style='color:#0a1f44;font-weight:600;font-size:1rem;'>{val}</div>
+                            letter-spacing:0.5px;font-weight:600;'>
+                    {label}
+                </div>
+                <div style='color:#0a1f44;font-weight:600;font-size:1rem;'>
+                    {val}
+                </div>
               </div>
             </div>
             """, unsafe_allow_html=True)
-
 
 
 # 9. HALAMAN: TENTANG APLIKASI
