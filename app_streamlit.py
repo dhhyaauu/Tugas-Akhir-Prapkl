@@ -414,21 +414,13 @@ def page_tentang_saya():
     col1, col2 = st.columns([1, 1.4], gap="large")
 
     with col1:
-   with col1:
     st.image(PROFILE_IMG, width=200)
-     
+
+with col2:
+    st.markdown("<div class='section-title'>📋 Informasi Pribadi</div>", unsafe_allow_html=True)
+
     """, unsafe_allow_html=True)
-        st.markdown(f"""
-        <div class='profile-card'>
-          {img_tag}
-          <div class='profile-name'>Saffa Dhiya Ur Rahma</div>
-          <div class='profile-role'>Rekayasa Perangkat Lunak</div>
-          <p style='color:#64748b; font-size:0.95rem; line-height:1.6;'>
-            Passionate dalam <b>Data Science</b> & <b>Machine Learning</b>.
-            Menyukai eksplorasi data, membangun model prediksi, dan
-            merancang dashboard analitik yang informatif.
-          </p>
-          <div style='margin-top:1.25rem;'>
+        
             <a href='mailto:saffadhiyaa1012@gmail.com' class='social-icon' title='Email'>✉️</a>
             <a href='https://github.com/dhhyaauu' target='_blank' class='social-icon' title='Github'>🐙</a>
             <a href='#' class='social-icon' title='Instagram'>📷</a>
@@ -438,7 +430,24 @@ def page_tentang_saya():
 
     with col2:
         st.markdown("<div class='section-title'>📋 Informasi Pribadi</div>", unsafe_allow_html=True)
+st.image(PROFILE_IMG, width=200)
 
+st.markdown("""
+<div class='profile-card'>
+  <div class='profile-name'>Saffa Dhiya Ur Rahma</div>
+  <div class='profile-role'>Rekayasa Perangkat Lunak</div>
+  <p style='color:#64748b; font-size:0.95rem; line-height:1.6;'>
+    Passionate dalam <b>Data Science</b> & <b>Machine Learning</b>.
+    Menyukai eksplorasi data, membangun model prediksi, dan
+    merancang dashboard analitik yang informatif.
+  </p>
+  <div style='margin-top:1.25rem;'>
+    <a href='mailto:saffadhiyaa1012@gmail.com' class='social-icon'>✉️</a>
+    <a href='https://github.com/dhhyaauu' target='_blank' class='social-icon'>🐙</a>
+    <a href='#' class='social-icon'>📷</a>
+  </div>
+</div>
+""", unsafe_allow_html=True)
         info_items = [
             ("👤", "Nama Lengkap", "Saffa Dhiya Ur Rahma"),
             ("🎓", "Jurusan", "Rekayasa Perangkat Lunak"),
