@@ -267,7 +267,7 @@ st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 # 4. KONSTANTA & PATH
 
 DATA_PATH       = "bank-full.csv"
-NOTEBOOK_PATH   = "./notebook.ipynb"
+NOTEBOOK_PATH   = "notebook.ipynb"
 MODEL_PATH      = "model_deposito.joblib"
 PROFILE_IMG     = "assets/fotoprofile.jpeg"
 DATASET_SOURCE  = "https://archive.ics.uci.edu/ml/datasets/Bank+Marketing"
