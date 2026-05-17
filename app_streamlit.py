@@ -1,24 +1,3 @@
-"""
-============================================================
-  APLIKASI PREDIKSI KETERTARIKAN NASABAH TERHADAP DEPOSITO
-  ----------------------------------------------------------
-  Author : Saffa Dhiya Ur Rahma
-  Stack  : Streamlit + Scikit-Learn + Plotly + Seaborn
-  Run    : streamlit run app_streamlit.py
-============================================================
-
-STRUKTUR FOLDER YANG DISARANKAN
--------------------------------
-.
-├── app_streamlit.py           # File utama (ini)
-├── bank-full.csv              # Dataset (UCI Bank Marketing)
-├── notebook.ipynb             # Notebook Jupyter
-├── model_deposito.joblib                 # (opsional) Model terlatih
-└── assets/
-    └── profile.jpg            # Foto profile
-"""
-
-
 # 1. IMPORTS
 
 import os
@@ -284,9 +263,8 @@ st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
 DATA_PATH       = "bank-full.csv"
 NOTEBOOK_PATH   = "notebook.ipynb"
-PROFILE_IMG     = "https://raw.githubusercontent.com/dhhyaauu/deposito-app/main/profile.jpeg"
 MODEL_PATH      = "model_deposito.joblib"
-
+PROFILE_IMG = "assets/fotoprofile.jpeg"
 DATASET_SOURCE  = "https://archive.ics.uci.edu/ml/datasets/Bank+Marketing"
 
 
@@ -436,19 +414,9 @@ def page_tentang_saya():
     col1, col2 = st.columns([1, 1.4], gap="large")
 
     with col1:
-    img_tag = f"<img src='{PROFILE_IMG}' class='profile-img'/>"
-
-    st.markdown(f"""
-    <div class='profile-card'>
-      {img_tag}
-      <div class='profile-name'>Saffa Dhiya Ur Rahma</div>
-      <div class='profile-role'>Rekayasa Perangkat Lunak</div>
-      <p style='color:#64748b; font-size:0.95rem; line-height:1.6;'>
-        Passionate dalam <b>Data Science</b> & <b>Machine Learning</b>.
-        Menyukai eksplorasi data, membangun model prediksi, dan
-        merancang dashboard analitik yang informatif.
-      </p>
-    </div>
+   with col1:
+    st.image(PROFILE_IMG, width=200)
+     
     """, unsafe_allow_html=True)
         st.markdown(f"""
         <div class='profile-card'>
