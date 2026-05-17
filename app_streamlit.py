@@ -158,7 +158,7 @@ CUSTOM_CSS = """
     align-items: center;
     justify-content: center;
     background: #f1f5f9;
-    border-radius: 50%;   /* <-- ini yang bikin lingkaran */
+    border-radius: 50%;   
     margin: 0 0.35rem;
     text-decoration: none;
     color: #0a1f44;
