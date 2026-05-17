@@ -436,7 +436,6 @@ def page_tentang_saya():
     col1, col2 = st.columns([1, 1.4], gap="large")
 
     with col1:
-        with col1:
     img_tag = f"<img src='{PROFILE_IMG}' class='profile-img'/>"
 
     st.markdown(f"""
