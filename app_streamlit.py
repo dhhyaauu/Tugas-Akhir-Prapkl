@@ -14,7 +14,7 @@ import seaborn as sns
 import plotly.express as px
 import plotly.graph_objects as go
 
-# streamlit-option-menu untuk navbar modern
+
 try:
     from streamlit_option_menu import option_menu
 except ImportError:
@@ -152,14 +152,19 @@ CUSTOM_CSS = """
         font-size: 0.95rem; margin-bottom: 1rem;
     }
     .social-icon {
-        display: inline-flex;
-        width: 44px; height: 44px;
-        align-items: center; justify-content: center;
-        background: #f1f5f9; border-radius: 12px;
-        margin: 0 0.35rem; text-decoration: none;
-        color: #0a1f44; font-size: 1.2rem;
-        transition: all 0.3s ease;
-    }
+    display: inline-flex;
+    width: 46px;
+    height: 46px;
+    align-items: center;
+    justify-content: center;
+    background: #f1f5f9;
+    border-radius: 50%;   /* <-- ini yang bikin lingkaran */
+    margin: 0 0.35rem;
+    text-decoration: none;
+    color: #0a1f44;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
     .social-icon:hover {
         background: #0a1f44; color: white;
         transform: translateY(-3px);
