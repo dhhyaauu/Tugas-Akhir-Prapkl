@@ -18,9 +18,9 @@ STRUKTUR FOLDER YANG DISARANKAN
     └── profile.jpg            # Foto profile
 """
 
-# =============================================================
+
 # 1. IMPORTS
-# =============================================================
+
 import os
 import json
 import base64
@@ -50,9 +50,9 @@ from sklearn.metrics import accuracy_score
 
 warnings.filterwarnings("ignore")
 
-# =============================================================
+
 # 2. KONFIGURASI HALAMAN
-# =============================================================
+
 st.set_page_config(
     page_title="Prediksi Deposito Nasabah | Saffa Dhiya",
     page_icon="💎",
@@ -60,9 +60,9 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# =============================================================
+
 # 3. CUSTOM CSS — TEMA NAVY / PUTIH / ABU / HITAM ELEGAN
-# =============================================================
+
 CUSTOM_CSS = """
 <style>
     /* ---------- Import Font ---------- */
@@ -280,19 +280,18 @@ CUSTOM_CSS = """
 """
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
-# =============================================================
 # 4. KONSTANTA & PATH
-# =============================================================
+
 DATA_PATH       = "bank-full.csv"
 NOTEBOOK_PATH   = "notebook.ipynb"
-PROFILE_IMG     = "assets/profile.jpg"
+PROFILE_IMG     = "assets/profile.jpeg"
 MODEL_PATH      = "model_deposito.joblib"
 
 DATASET_SOURCE  = "https://archive.ics.uci.edu/ml/datasets/Bank+Marketing"
 
-# =============================================================
+
 # 5. UTILITY FUNCTIONS
-# =============================================================
+
 @st.cache_data(show_spinner=False)
 def load_dataset(path: str = DATA_PATH) -> pd.DataFrame | None:
     """Load dataset Bank Marketing dari UCI."""
@@ -391,9 +390,9 @@ with st.sidebar:
     """, unsafe_allow_html=True)
 
 
-# =============================================================
+
 # 7. NAVBAR HORIZONTAL
-# =============================================================
+
 selected = option_menu(
     menu_title=None,
     options=["Tentang Saya", "Tentang Aplikasi", "Analisis Data", "Prediksi"],
@@ -424,9 +423,8 @@ selected = option_menu(
 )
 
 
-# =============================================================
+
 # 8. HALAMAN: TENTANG SAYA
-# =============================================================
 def page_tentang_saya():
     st.markdown("""
     <div class='hero-header fade-in'>
@@ -488,9 +486,9 @@ def page_tentang_saya():
             """, unsafe_allow_html=True)
 
 
-# =============================================================
+
 # 9. HALAMAN: TENTANG APLIKASI
-# =============================================================
+
 def page_tentang_aplikasi():
     st.markdown("""
     <div class='hero-header fade-in'>
@@ -585,9 +583,9 @@ def page_tentang_aplikasi():
     """, unsafe_allow_html=True)
 
 
-# =============================================================
+
 # 10. HALAMAN: ANALISIS DATA
-# =============================================================
+
 def page_analisis_data():
     st.markdown("""
     <div class='hero-header fade-in'>
