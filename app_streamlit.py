@@ -13,7 +13,7 @@ STRUKTUR FOLDER YANG DISARANKAN
 ├── app_streamlit.py           # File utama (ini)
 ├── bank-full.csv              # Dataset (UCI Bank Marketing)
 ├── notebook.ipynb             # Notebook Jupyter
-├── model.pkl                  # (opsional) Model terlatih
+├── model_deposito.joblib                 # (opsional) Model terlatih
 └── assets/
     └── profile.jpg            # Foto profile
 """
@@ -284,7 +284,7 @@ st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
 DATA_PATH       = "bank-full.csv"
 NOTEBOOK_PATH   = "notebook.ipynb"
-PROFILE_IMG     = "assets/profile.jpeg"
+PROFILE_IMG     = "https://raw.githubusercontent.com/dhhyaauu/deposito-app/main/profile.jpeg"
 MODEL_PATH      = "model_deposito.joblib"
 
 DATASET_SOURCE  = "https://archive.ics.uci.edu/ml/datasets/Bank+Marketing"
@@ -436,14 +436,21 @@ def page_tentang_saya():
     col1, col2 = st.columns([1, 1.4], gap="large")
 
     with col1:
-        img_b64 = image_to_base64(PROFILE_IMG)
-        if img_b64:
-            img_tag = f"<img src='data:image/jpeg;base64,{img_b64}' class='profile-img'/>"
-        else:
-            img_tag = """<div class='profile-img' style='background:linear-gradient(135deg,#0a1f44,#1e3a8a);
-                         display:flex;align-items:center;justify-content:center;color:white;
-                         font-size:4rem;font-weight:800;margin:0 auto;'>S</div>"""
+        with col1:
+    img_tag = f"<img src='{PROFILE_IMG}' class='profile-img'/>"
 
+    st.markdown(f"""
+    <div class='profile-card'>
+      {img_tag}
+      <div class='profile-name'>Saffa Dhiya Ur Rahma</div>
+      <div class='profile-role'>Rekayasa Perangkat Lunak</div>
+      <p style='color:#64748b; font-size:0.95rem; line-height:1.6;'>
+        Passionate dalam <b>Data Science</b> & <b>Machine Learning</b>.
+        Menyukai eksplorasi data, membangun model prediksi, dan
+        merancang dashboard analitik yang informatif.
+      </p>
+    </div>
+    """, unsafe_allow_html=True)
         st.markdown(f"""
         <div class='profile-card'>
           {img_tag}
