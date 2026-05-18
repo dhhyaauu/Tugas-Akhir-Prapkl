@@ -62,7 +62,7 @@ CUSTOM_CSS = """
         background: linear-gradient(135deg, #0a1f44 0%, #1e3a8a 50%, #0f172a 100%);
         padding: 3rem 2.5rem;
         border-radius: 24px;
-        color: #000000;
+        color: #121358;
         box-shadow: 0 20px 60px rgba(10, 31, 68, 0.25);
         margin-bottom: 2rem;
         position: relative;
@@ -205,7 +205,7 @@ CUSTOM_CSS = """
     [data-testid="stSidebar"] .sidebar-title {
         font-family: 'Plus Jakarta Sans', sans-serif;
         font-weight: 800; font-size: 1.1rem;
-        color: #0a1f44; margin-bottom: 0.5rem;
+        color: #000000; margin-bottom: 0.5rem;
     }
 
     /* ---------- Tabs ---------- */
