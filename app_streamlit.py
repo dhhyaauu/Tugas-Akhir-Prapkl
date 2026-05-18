@@ -62,7 +62,7 @@ CUSTOM_CSS = """
         background: linear-gradient(135deg, #0a1f44 0%, #1e3a8a 50%, #0f172a 100%);
         padding: 3rem 2.5rem;
         border-radius: 24px;
-        color: white;
+        color: #000000;
         box-shadow: 0 20px 60px rgba(10, 31, 68, 0.25);
         margin-bottom: 2rem;
         position: relative;
