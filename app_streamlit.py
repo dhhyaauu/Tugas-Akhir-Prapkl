@@ -54,6 +54,7 @@ CUSTOM_CSS = """
     /* ---------- Background ---------- */
     .stApp {
         background: linear-gradient(135deg, #f7f9fc 0%, #eef2f7 100%);
+        color: #000000
     }
 
     /* ---------- Header Gradient ---------- */
@@ -405,7 +406,147 @@ selected = option_menu(
     },
 )
 
+# 11. HALAMAN: PREDIKSI
 
+def page_prediksi():
+    st.markdown("""
+    <div class='hero-header fade-in'>
+      <h1>🔮 Prediksi Deposito</h1>
+      <p>Masukkan data nasabah untuk memprediksi kemungkinan membuka deposito</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    df = load_dataset()
+    if df is None:
+        st.warning("Dataset belum tersedia. Form prediksi akan menggunakan opsi default.", icon="📂")
+
+    # ------ Form Input ------
+    st.markdown("<div class='section-title'>📝 Data Nasabah</div>", unsafe_allow_html=True)
+
+    with st.form("predict_form"):
+        c1, c2, c3 = st.columns(3)
+        with c1:
+            age      = st.number_input("👤 Usia", 18, 100, 35, help="Usia nasabah dalam tahun")
+            job      = st.selectbox("💼 Pekerjaan",
+                        ["admin.","blue-collar","entrepreneur","housemaid","management",
+                         "retired","self-employed","services","student","technician",
+                         "unemployed","unknown"], help="Jenis pekerjaan")
+            marital  = st.selectbox("💍 Status", ["married","single","divorced"])
+            education= st.selectbox("🎓 Pendidikan", ["primary","secondary","tertiary","unknown"])
+            default  = st.selectbox("⚠️ Kredit Macet?", ["no","yes"])
+            balance  = st.number_input("💰 Saldo (EUR)", -5000, 200000, 1500)
+
+        with c2:
+            housing  = st.selectbox("🏠 KPR?", ["yes","no"])
+            loan     = st.selectbox("💳 Pinjaman Pribadi?", ["no","yes"])
+            contact  = st.selectbox("📞 Tipe Kontak", ["cellular","telephone","unknown"])
+            day      = st.slider("📅 Tanggal Kontak", 1, 31, 15)
+            month    = st.selectbox("🗓️ Bulan",
+                        ["jan","feb","mar","apr","may","jun","jul",
+                         "aug","sep","oct","nov","dec"])
+            duration = st.number_input("⏱️ Durasi (detik)", 0, 5000, 180)
+
+        with c3:
+            campaign = st.number_input("📣 Jumlah Kampanye", 1, 100, 2)
+            pdays    = st.number_input("🔁 Hari sejak terakhir", -1, 999, -1)
+            previous = st.number_input("📊 Kontak Sebelumnya", 0, 100, 0)
+            poutcome = st.selectbox("🎯 Hasil Kampanye Lalu",
+                        ["unknown","other","failure","success"])
+
+        st.markdown("<br/>", unsafe_allow_html=True)
+        submitted = st.form_submit_button("🚀 Prediksi Sekarang", use_container_width=True)
+
+    # ------ Proses Prediksi ------
+    if submitted:
+        with st.spinner("🔄 Sedang memproses prediksi..."):
+            import time; time.sleep(1)
+
+            if df is not None:
+                bundle = train_fallback_model(df)
+                input_df = pd.DataFrame([{
+                    "age":age,"job":job,"marital":marital,"education":education,
+                    "default":default,"balance":balance,"housing":housing,"loan":loan,
+                    "contact":contact,"day":day,"month":month,"duration":duration,
+                    "campaign":campaign,"pdays":pdays,"previous":previous,"poutcome":poutcome,
+                }])
+                # encode
+                for col, le in bundle["encoders"].items():
+                    if col == "y": continue
+                    try:
+                        input_df[col] = le.transform(input_df[col].astype(str))
+                    except Exception:
+                        input_df[col] = 0
+                X = bundle["scaler"].transform(input_df[bundle["features"]])
+                pred  = bundle["model"].predict(X)[0]
+                proba = bundle["model"].predict_proba(X)[0]
+                yes_idx = list(bundle["encoders"]["y"].classes_).index("yes")
+                prob_yes = proba[yes_idx] * 100
+                hasil = "yes" if pred == yes_idx else "no"
+            else:
+                # Dummy fallback
+                prob_yes = np.random.uniform(20, 80)
+                hasil = "yes" if prob_yes >= 50 else "no"
+
+        # ------ Tampilan Hasil ------
+        st.markdown("<div class='section-title'>🎯 Hasil Prediksi</div>", unsafe_allow_html=True)
+
+        if hasil == "yes":
+            st.markdown(f"""
+            <div class='result-success'>
+              <div style='font-size:3.5rem;'>✅</div>
+              <h2 style='margin:0.5rem 0;'>Nasabah BERPOTENSI Membuka Deposito</h2>
+              <div style='font-size:2.5rem;font-weight:800;margin-top:0.5rem;'>{prob_yes:.1f}%</div>
+              <p style='opacity:0.9;margin-top:0.5rem;'>Probabilitas ketertarikan</p>
+            </div>
+            """, unsafe_allow_html=True)
+        else:
+            st.markdown(f"""
+            <div class='result-fail'>
+              <div style='font-size:3.5rem;'>❌</div>
+              <h2 style='margin:0.5rem 0;'>Nasabah TIDAK Berpotensi Membuka Deposito</h2>
+              <div style='font-size:2.5rem;font-weight:800;margin-top:0.5rem;'>{100-prob_yes:.1f}%</div>
+              <p style='opacity:0.9;margin-top:0.5rem;'>Probabilitas tidak tertarik</p>
+            </div>
+            """, unsafe_allow_html=True)
+
+        # Gauge chart
+        col1, col2 = st.columns(2)
+        with col1:
+            fig = go.Figure(go.Indicator(
+                mode="gauge+number",
+                value=prob_yes,
+                title={'text': "Probabilitas YES (%)"},
+                gauge={
+                    'axis': {'range': [0, 100]},
+                    'bar': {'color': "#1e3a8a"},
+                    'steps': [
+                        {'range': [0, 40], 'color': "#fee2e2"},
+                        {'range': [40, 70], 'color': "#fef3c7"},
+                        {'range': [70, 100], 'color': "#d1fae5"},
+                    ],
+                }
+            ))
+            fig.update_layout(height=320, paper_bgcolor="white")
+            st.plotly_chart(fig, use_container_width=True)
+
+        with col2:
+            fig = px.pie(values=[prob_yes, 100 - prob_yes],
+                         names=["Tertarik", "Tidak Tertarik"], hole=0.55,
+                         color_discrete_sequence=["#1e3a8a", "#cbd5e1"])
+            fig.update_layout(height=320, paper_bgcolor="white")
+            st.plotly_chart(fig, use_container_width=True)
+
+        # Interpretasi
+        st.markdown("<div class='section-title'>📖 Interpretasi Hasil</div>", unsafe_allow_html=True)
+        if hasil == "yes":
+            interpret = ("Model memprediksi nasabah ini memiliki kecenderungan tinggi "
+                         "untuk membuka deposito. Disarankan untuk melakukan pendekatan "
+                         "marketing yang lebih intensif dan menawarkan produk deposito terbaik.")
+        else:
+            interpret = ("Model memprediksi nasabah ini kurang berminat membuka deposito. "
+                         "Disarankan untuk fokus pada nasabah dengan potensi lebih tinggi "
+                         "atau mengubah pendekatan marketing.")
+        st.markdown(f"<div class='premium-card'>{interpret}</div>", unsafe_allow_html=True)
 
 # 8. HALAMAN: TENTANG SAYA
 def page_tentang_saya():
@@ -834,149 +975,6 @@ def render_tab_istilah():
         </div>
         """, unsafe_allow_html=True)
 
-
-
-# 11. HALAMAN: PREDIKSI
-
-def page_prediksi():
-    st.markdown("""
-    <div class='hero-header fade-in'>
-      <h1>🔮 Prediksi Deposito</h1>
-      <p>Masukkan data nasabah untuk memprediksi kemungkinan membuka deposito</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    df = load_dataset()
-    if df is None:
-        st.warning("Dataset belum tersedia. Form prediksi akan menggunakan opsi default.", icon="📂")
-
-    # ------ Form Input ------
-    st.markdown("<div class='section-title'>📝 Data Nasabah</div>", unsafe_allow_html=True)
-
-    with st.form("predict_form"):
-        c1, c2, c3 = st.columns(3)
-        with c1:
-            age      = st.number_input("👤 Usia", 18, 100, 35, help="Usia nasabah dalam tahun")
-            job      = st.selectbox("💼 Pekerjaan",
-                        ["admin.","blue-collar","entrepreneur","housemaid","management",
-                         "retired","self-employed","services","student","technician",
-                         "unemployed","unknown"], help="Jenis pekerjaan")
-            marital  = st.selectbox("💍 Status", ["married","single","divorced"])
-            education= st.selectbox("🎓 Pendidikan", ["primary","secondary","tertiary","unknown"])
-            default  = st.selectbox("⚠️ Kredit Macet?", ["no","yes"])
-            balance  = st.number_input("💰 Saldo (EUR)", -5000, 200000, 1500)
-
-        with c2:
-            housing  = st.selectbox("🏠 KPR?", ["yes","no"])
-            loan     = st.selectbox("💳 Pinjaman Pribadi?", ["no","yes"])
-            contact  = st.selectbox("📞 Tipe Kontak", ["cellular","telephone","unknown"])
-            day      = st.slider("📅 Tanggal Kontak", 1, 31, 15)
-            month    = st.selectbox("🗓️ Bulan",
-                        ["jan","feb","mar","apr","may","jun","jul",
-                         "aug","sep","oct","nov","dec"])
-            duration = st.number_input("⏱️ Durasi (detik)", 0, 5000, 180)
-
-        with c3:
-            campaign = st.number_input("📣 Jumlah Kampanye", 1, 100, 2)
-            pdays    = st.number_input("🔁 Hari sejak terakhir", -1, 999, -1)
-            previous = st.number_input("📊 Kontak Sebelumnya", 0, 100, 0)
-            poutcome = st.selectbox("🎯 Hasil Kampanye Lalu",
-                        ["unknown","other","failure","success"])
-
-        st.markdown("<br/>", unsafe_allow_html=True)
-        submitted = st.form_submit_button("🚀 Prediksi Sekarang", use_container_width=True)
-
-    # ------ Proses Prediksi ------
-    if submitted:
-        with st.spinner("🔄 Sedang memproses prediksi..."):
-            import time; time.sleep(1)
-
-            if df is not None:
-                bundle = train_fallback_model(df)
-                input_df = pd.DataFrame([{
-                    "age":age,"job":job,"marital":marital,"education":education,
-                    "default":default,"balance":balance,"housing":housing,"loan":loan,
-                    "contact":contact,"day":day,"month":month,"duration":duration,
-                    "campaign":campaign,"pdays":pdays,"previous":previous,"poutcome":poutcome,
-                }])
-                # encode
-                for col, le in bundle["encoders"].items():
-                    if col == "y": continue
-                    try:
-                        input_df[col] = le.transform(input_df[col].astype(str))
-                    except Exception:
-                        input_df[col] = 0
-                X = bundle["scaler"].transform(input_df[bundle["features"]])
-                pred  = bundle["model"].predict(X)[0]
-                proba = bundle["model"].predict_proba(X)[0]
-                yes_idx = list(bundle["encoders"]["y"].classes_).index("yes")
-                prob_yes = proba[yes_idx] * 100
-                hasil = "yes" if pred == yes_idx else "no"
-            else:
-                # Dummy fallback
-                prob_yes = np.random.uniform(20, 80)
-                hasil = "yes" if prob_yes >= 50 else "no"
-
-        # ------ Tampilan Hasil ------
-        st.markdown("<div class='section-title'>🎯 Hasil Prediksi</div>", unsafe_allow_html=True)
-
-        if hasil == "yes":
-            st.markdown(f"""
-            <div class='result-success'>
-              <div style='font-size:3.5rem;'>✅</div>
-              <h2 style='margin:0.5rem 0;'>Nasabah BERPOTENSI Membuka Deposito</h2>
-              <div style='font-size:2.5rem;font-weight:800;margin-top:0.5rem;'>{prob_yes:.1f}%</div>
-              <p style='opacity:0.9;margin-top:0.5rem;'>Probabilitas ketertarikan</p>
-            </div>
-            """, unsafe_allow_html=True)
-        else:
-            st.markdown(f"""
-            <div class='result-fail'>
-              <div style='font-size:3.5rem;'>❌</div>
-              <h2 style='margin:0.5rem 0;'>Nasabah TIDAK Berpotensi Membuka Deposito</h2>
-              <div style='font-size:2.5rem;font-weight:800;margin-top:0.5rem;'>{100-prob_yes:.1f}%</div>
-              <p style='opacity:0.9;margin-top:0.5rem;'>Probabilitas tidak tertarik</p>
-            </div>
-            """, unsafe_allow_html=True)
-
-        # Gauge chart
-        col1, col2 = st.columns(2)
-        with col1:
-            fig = go.Figure(go.Indicator(
-                mode="gauge+number",
-                value=prob_yes,
-                title={'text': "Probabilitas YES (%)"},
-                gauge={
-                    'axis': {'range': [0, 100]},
-                    'bar': {'color': "#1e3a8a"},
-                    'steps': [
-                        {'range': [0, 40], 'color': "#fee2e2"},
-                        {'range': [40, 70], 'color': "#fef3c7"},
-                        {'range': [70, 100], 'color': "#d1fae5"},
-                    ],
-                }
-            ))
-            fig.update_layout(height=320, paper_bgcolor="white")
-            st.plotly_chart(fig, use_container_width=True)
-
-        with col2:
-            fig = px.pie(values=[prob_yes, 100 - prob_yes],
-                         names=["Tertarik", "Tidak Tertarik"], hole=0.55,
-                         color_discrete_sequence=["#1e3a8a", "#cbd5e1"])
-            fig.update_layout(height=320, paper_bgcolor="white")
-            st.plotly_chart(fig, use_container_width=True)
-
-        # Interpretasi
-        st.markdown("<div class='section-title'>📖 Interpretasi Hasil</div>", unsafe_allow_html=True)
-        if hasil == "yes":
-            interpret = ("Model memprediksi nasabah ini memiliki kecenderungan tinggi "
-                         "untuk membuka deposito. Disarankan untuk melakukan pendekatan "
-                         "marketing yang lebih intensif dan menawarkan produk deposito terbaik.")
-        else:
-            interpret = ("Model memprediksi nasabah ini kurang berminat membuka deposito. "
-                         "Disarankan untuk fokus pada nasabah dengan potensi lebih tinggi "
-                         "atau mengubah pendekatan marketing.")
-        st.markdown(f"<div class='premium-card'>{interpret}</div>", unsafe_allow_html=True)
 
 
 
