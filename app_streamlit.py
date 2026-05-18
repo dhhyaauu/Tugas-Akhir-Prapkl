@@ -62,7 +62,7 @@ CUSTOM_CSS = """
         background: linear-gradient(135deg, #0a1f44 0%, #1e3a8a 50%, #0f172a 100%);
         padding: 3rem 2.5rem;
         border-radius: 24px;
-        color: #121358;
+        color: #ffffff;
         box-shadow: 0 20px 60px rgba(10, 31, 68, 0.25);
         margin-bottom: 2rem;
         position: relative;
@@ -330,7 +330,7 @@ with st.sidebar:
     <div style='text-align:center; padding:1rem 0;'>
       <div style='font-size:2.5rem;'>💎</div>
       <div class='sidebar-title'>Deposit Predictor</div>
-      <div style='color:#64748b; font-size:0.8rem;'>Premium ML Dashboard</div>
+      <div style='color:#000000; font-size:0.8rem;'>Premium ML Dashboard</div>
     </div>
     <hr style='margin:1rem 0; border-color:#e2e8f0;'/>
     """, unsafe_allow_html=True)
@@ -979,15 +979,15 @@ def render_tab_istilah():
 
 
 # 12. ROUTING
-
-if selected == "Tentang Saya":
-    page_tentang_saya()
+if selected == "Prediksi":
+    page_prediksi()
 elif selected == "Tentang Aplikasi":
     page_tentang_aplikasi()
 elif selected == "Analisis Data":
     page_analisis_data()
-elif selected == "Prediksi":
-    page_prediksi()
+elif selected == "Tentang Saya":
+    page_tentang_saya()
+
 
 
 
