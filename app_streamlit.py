@@ -704,4 +704,4 @@ st.markdown(f"""
   <div style='font-weight:600;margin-bottom:0.25rem;'>💎 Deposit Predictor</div>
   © 2026, dibuat oleh <b>Saffa Dhiya Ur Rahma</b>
 </div>
-""", unsafe_allow_html=True)s
+""", unsafe_allow_html=True)
