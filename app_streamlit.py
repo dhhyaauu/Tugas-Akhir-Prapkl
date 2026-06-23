@@ -45,7 +45,7 @@ st.set_page_config(
 CUSTOM_CSS = """
 <style>
     /* ---------- Import Font ---------- */
-    @import url('[https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap)');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght=400;600;700;800&display=swap');
 
     html, body, [class*="css"] {
         font-family: 'Inter', sans-serif;
@@ -54,7 +54,13 @@ CUSTOM_CSS = """
     /* ---------- Background ---------- */
     .stApp {
         background: linear-gradient(135deg, #f7f9fc 0%, #eef2f7 100%);
-        color: #000000
+    }
+
+    /* ---------- Form & Input Label Fix ---------- */
+    .stApp label p {
+        color: #0a1f44 !important;
+        font-weight: 600 !important;
+        font-size: 0.95rem !important;
     }
 
     /* ---------- Header Gradient ---------- */
@@ -80,10 +86,12 @@ CUSTOM_CSS = """
         font-family: 'Plus Jakarta Sans', sans-serif;
         font-size: 2.4rem; font-weight: 800;
         margin: 0; letter-spacing: -0.5px;
+        color: #ffffff !important;
     }
     .hero-header p {
         opacity: 0.85; font-size: 1.05rem;
         margin-top: 0.5rem; font-weight: 400;
+        color: #ffffff !important;
     }
 
     /* ---------- Card ---------- */
@@ -95,6 +103,7 @@ CUSTOM_CSS = """
         border: 1px solid rgba(15, 23, 42, 0.05);
         transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         margin-bottom: 1rem;
+        color: #0a1f44;
     }
     .premium-card:hover {
         transform: translateY(-4px);
@@ -135,14 +144,6 @@ CUSTOM_CSS = """
         transform: translateY(-8px);
         box-shadow: 0 30px 80px rgba(10, 31, 68, 0.18);
     }
-    .profile-img {
-        width: 180px; height: 180px;
-        border-radius: 100%;
-        object-fit: cover;
-        border: 6px solid white;
-        box-shadow: 0 10px 30px rgba(10, 31, 68, 0.2);
-        margin-bottom: 1.25rem;
-    }
     .profile-name {
         font-family: 'Plus Jakarta Sans', sans-serif;
         font-size: 1.75rem; font-weight: 800;
@@ -153,19 +154,19 @@ CUSTOM_CSS = """
         font-size: 0.95rem; margin-bottom: 1rem;
     }
     .social-icon {
-    display: inline-flex;
-    width: 46px;
-    height: 46px;
-    align-items: center;
-    justify-content: center;
-    background: #f1f5f9;
-    border-radius: 50%;   
-    margin: 0 0.35rem;
-    text-decoration: none;
-    color: #0a1f44;
-    font-size: 1.2rem;
-    transition: all 0.3s ease;
-}
+        display: inline-flex;
+        width: 46px;
+        height: 46px;
+        align-items: center;
+        justify-content: center;
+        background: #f1f5f9;
+        border-radius: 50%;   
+        margin: 0 0.35rem;
+        text-decoration: none;
+        color: #0a1f44;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+    }
     .social-icon:hover {
         background: #0a1f44; color: white;
         transform: translateY(-3px);
@@ -195,6 +196,7 @@ CUSTOM_CSS = """
     .stButton>button:hover {
         transform: translateY(-2px);
         box-shadow: 0 8px 24px rgba(10, 31, 68, 0.35) !important;
+        color: white !important;
     }
 
     /* ---------- Sidebar ---------- */
@@ -206,7 +208,7 @@ CUSTOM_CSS = """
     [data-testid="stSidebar"] h3, 
     [data-testid="stSidebar"] span, 
     [data-testid="stSidebar"] div {
-        color: #0f172a !important; /* Memaksa semua teks bawaan sidebar berwarna gelap */
+        color: #0f172a !important; 
     }
     [data-testid="stSidebar"] .sidebar-title {
         font-family: 'Plus Jakarta Sans', sans-serif;
@@ -241,20 +243,26 @@ CUSTOM_CSS = """
     /* ---------- Result Card (prediksi) — Animasi Baru ---------- */
     .result-success {
         background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
-        color: black; padding: 2rem; border-radius: 20px;
+        color: #ffffff !important; padding: 2rem; border-radius: 20px;
         text-align: center;
         box-shadow: 0 15px 50px rgba(4, 120, 87, 0.4);
         animation: resultPulse 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
     }
+    .result-success div, .result-success h2, .result-success p {
+        color: #ffffff !important;
+    }
     .result-fail {
         background: linear-gradient(135deg, #7f1d1d 0%, #b91c1c 100%);
-        color: black; padding: 2rem; border-radius: 20px;
+        color: #ffffff !important; padding: 2rem; border-radius: 20px;
         text-align: center;
         box-shadow: 0 15px 50px rgba(185, 28, 28, 0.4);
         animation: resultPulse 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
     }
+    .result-fail div, .result-fail h2, .result-fail p {
+        color: #ffffff !important;
+    }
     
-    /* Keyframe Animasi Baru (Efek Pop Zoom Berenergi) */
+    /* Keyframe Animasi Baru */
     @keyframes resultPulse {
         0% { transform: scale(0.8); opacity: 0; box-shadow: 0 0 0 rgba(0,0,0,0); }
         70% { transform: scale(1.03); }
@@ -300,7 +308,7 @@ DATA_PATH       = "bank-full.csv"
 NOTEBOOK_PATH   = "notebook.ipynb"
 MODEL_PATH      = "model_deposito.joblib"
 PROFILE_IMG     = "assets/saffa.png"
-DATASET_SOURCE  = "[https://archive.ics.uci.edu/ml/datasets/Bank+Marketing](https://archive.ics.uci.edu/ml/datasets/Bank+Marketing)"
+DATASET_SOURCE  = "https://archive.ics.uci.edu/ml/datasets/Bank+Marketing"
 
 
 # 5. UTILITY FUNCTIONS
@@ -526,22 +534,22 @@ def page_prediksi():
             st.markdown(f"""
             <div class='result-success'>
               <div style='font-size:3.5rem;'>✅</div>
-              <h2 style='margin:0.5rem 0; color:white;'>Nasabah BERPOTENSI Membuka Deposito</h2>
+              <h2 style='margin:0.5rem 0;'>Nasabah BERPOTENSI Membuka Deposito</h2>
               <div style='font-size:2.5rem;font-weight:800;margin-top:0.5rem;'>{prob_yes:.1f}%</div>
-              <p style='opacity:0.9;margin-top:0.5rem; color:white;'>Probabilitas ketertarikan</p>
+              <p style='opacity:0.9;margin-top:0.5rem;'>Probabilitas ketertarikan</p>
             </div>
             """, unsafe_allow_html=True)
         else:
             st.markdown(f"""
             <div class='result-fail'>
               <div style='font-size:3.5rem;'>❌</div>
-              <h2 style='margin:0.5rem 0; color:white;'>Nasabah TIDAK Berpotensi Membuka Deposito</h2>
+              <h2 style='margin:0.5rem 0;'>Nasabah TIDAK Berpotensi Membuka Deposito</h2>
               <div style='font-size:2.5rem;font-weight:800;margin-top:0.5rem;'>{100-prob_yes:.1f}%</div>
-              <p style='opacity:0.9;margin-top:0.5rem; color:white;'>Probabilitas tidak tertarik</p>
+              <p style='opacity:0.9;margin-top:0.5rem;'>Probabilitas tidak tertarik</p>
             </div>
             """, unsafe_allow_html=True)
 
-        # Gauge chart
+        # Gauge chart & Pie Chart
         col1, col2 = st.columns(2)
         with col1:
             fig = go.Figure(go.Indicator(
@@ -560,6 +568,16 @@ def page_prediksi():
             ))
             fig.update_layout(height=320, paper_bgcolor="white")
             st.plotly_chart(fig, use_container_width=True)
+            
+            # Penjelasan Chart 1
+            st.markdown(f"""
+            <div class='premium-card' style='margin-top:-20px;'>
+                <b>📌 Penjelasan Gauge Chart:</b><br/>
+                Grafik di atas menunjukkan tingkat keyakinan model secara linear. 
+                Saat ini jarum berada di angka <b>{prob_yes:.1f}%</b>. 
+                Zonasi warna menunjukkan kategori potensi: Merah (Rendah), Kuning (Sedang), dan Hijau (Tinggi).
+            </div>
+            """, unsafe_allow_html=True)
 
         with col2:
             fig = px.pie(values=[prob_yes, 100 - prob_yes],
@@ -567,6 +585,15 @@ def page_prediksi():
                          color_discrete_sequence=["#1e3a8a", "#cbd5e1"])
             fig.update_layout(height=320, paper_bgcolor="white")
             st.plotly_chart(fig, use_container_width=True)
+            
+            # Penjelasan Chart 2
+            st.markdown(f"""
+            <div class='premium-card' style='margin-top:-20px;'>
+                <b>📌 Penjelasan Donut Chart:</b><br/>
+                Grafik lingkaran ini membandingkan proporsi antara peluang nasabah <b>Tertarik (Warna Biru: {prob_yes:.1f}%)</b> 
+                dengan peluang nasabah <b>Tidak Tertarik (Warna Abu-abu: {100-prob_yes:.1f}%)</b> untuk membuka akun deposito berjangka.
+            </div>
+            """, unsafe_allow_html=True)
 
         # Interpretasi
         st.markdown("<div class='section-title'>📖 Interpretasi Hasil</div>", unsafe_allow_html=True)
@@ -612,7 +639,7 @@ def page_tentang_saya():
 
           <div style='margin-top:1.25rem;'>
             <a href='mailto:saffadhiyaa1012@gmail.com' class='social-icon'>✉️</a>
-            <a href='[https://github.com/dhhyaauu](https://github.com/dhhyaauu)' target='_blank' class='social-icon'>🐙</a>
+            <a href='https://github.com/dhhyaauu' target='_blank' class='social-icon'>🐙</a>
             <a href='#' class='social-icon'>📷</a>
           </div>
         </div>
@@ -734,8 +761,8 @@ def page_tentang_aplikasi():
     <div style='background:linear-gradient(135deg,#0a1f44,#1e3a8a);color:white;
                 padding:2rem;border-radius:20px;text-align:center;margin-top:2rem;
                 box-shadow:0 15px 50px rgba(10,31,68,0.25);'>
-      <h3 style='margin:0 0 0.5rem;'>🚀 Siap Mencoba?</h3>
-      <p style='margin:0;opacity:0.9;'>
+      <h3 style='margin:0 0 0.5rem; color:white;'>🚀 Siap Mencoba?</h3>
+      <p style='margin:0;opacity:0.9; color:white;'>
         Klik menu <b>Prediksi</b> di atas untuk mencoba model prediksi kami!
       </p>
     </div>
