@@ -569,7 +569,7 @@ def page_prediksi():
             interpret = ("Model memprediksi nasabah ini kurang berminat membuka deposito. "
                          "Disarankan untuk fokus pada nasabah dengan potensi lebih tinggi "
                          "atau mengubah pendekatan marketing.")
-        st.markdown(f"<div class='premium-card'>{interpret}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='premium-card'>{interpret}</div>", unsafe_allow_html=True)
 
 # 8. HALAMAN: TENTANG SAYA
 def page_tentang_saya():
