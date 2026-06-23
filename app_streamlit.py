@@ -202,10 +202,22 @@ CUSTOM_CSS = """
         background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
         border-right: 1px solid rgba(15, 23, 42, 0.06);
     }
+    [data-testid="stSidebar"] p, 
+    [data-testid="stSidebar"] h3, 
+    [data-testid="stSidebar"] span, 
+    [data-testid="stSidebar"] div {
+        color: #0f172a !important; /* Memaksa semua teks bawaan sidebar berwarna gelap */
+    }
     [data-testid="stSidebar"] .sidebar-title {
         font-family: 'Plus Jakarta Sans', sans-serif;
-        font-weight: 800; font-size: 1.1rem;
-        color: #000000; margin-bottom: 0.5rem;
+        font-weight: 800; font-size: 1.3rem;
+        color: #000000 !important; margin-bottom: 0.5rem;
+    }
+    [data-testid="stSidebar"] .sidebar-subtitle {
+        color: #475569 !important; font-size: 0.85rem; font-weight: 600;
+    }
+    [data-testid="stSidebar"] .sidebar-copyright {
+        color: #94a3b8 !important; font-size: 0.75rem; text-align: center; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;
     }
 
     /* ---------- Tabs ---------- */
@@ -226,24 +238,27 @@ CUSTOM_CSS = """
         color: white !important;
     }
 
-    /* ---------- Result Card (prediksi) ---------- */
+    /* ---------- Result Card (prediksi) — Animasi Baru ---------- */
     .result-success {
         background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
         color: white; padding: 2rem; border-radius: 20px;
         text-align: center;
-        box-shadow: 0 15px 50px rgba(4, 120, 87, 0.3);
-        animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 15px 50px rgba(4, 120, 87, 0.4);
+        animation: resultPulse 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
     }
     .result-fail {
         background: linear-gradient(135deg, #7f1d1d 0%, #b91c1c 100%);
         color: white; padding: 2rem; border-radius: 20px;
         text-align: center;
-        box-shadow: 0 15px 50px rgba(185, 28, 28, 0.3);
-        animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 15px 50px rgba(185, 28, 28, 0.4);
+        animation: resultPulse 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
     }
-    @keyframes slideUp {
-        from { opacity: 0; transform: translateY(20px); }
-        to   { opacity: 1; transform: translateY(0); }
+    
+    /* Keyframe Animasi Baru (Efek Pop Zoom Berenergi) */
+    @keyframes resultPulse {
+        0% { transform: scale(0.8); opacity: 0; box-shadow: 0 0 0 rgba(0,0,0,0); }
+        70% { transform: scale(1.03); }
+        100% { transform: scale(1); opacity: 1; }
     }
     @keyframes fadeIn {
         from { opacity: 0; }
@@ -323,24 +338,23 @@ def image_to_base64(path: str) -> str | None:
 
 
 
-# 6. SIDEBAR — PANDUAN PENGGUNAAN
+# 6. SIDEBAR — PANDUAN PENGGUNAAN (Sudah Diperbaiki & Jelas)
 
 with st.sidebar:
     st.markdown("""
     <div style='text-align:center; padding:1rem 0;'>
       <div style='font-size:2.5rem;'>💎</div>
       <div class='sidebar-title'>Deposit Predictor</div>
-      <div style='color:#000000; font-size:0.8rem;'>Premium ML Dashboard</div>
-      <color: #fffff>
+      <div class='sidebar-subtitle'>Premium ML Dashboard</div>
     </div>
-    <hr style='margin:1rem 0; border-color:#e2e8f0;'/>
+    <hr style='margin:1rem 0; border-color:#cbd5e1;'/>
     """, unsafe_allow_html=True)
 
     st.markdown("### 📖 Panduan Penggunaan")
     st.markdown("""
     **Langkah-langkah:**
     1. Mulai dari **Tentang Aplikasi**
-    2. Lihat analisi data pada halaman **Analisis Data** untuk eksplorasi
+    2. Lihat analisis data pada halaman **Analisis Data** untuk eksplorasi
     3. Lakukan prediksi pada halaman **Prediksi**
     4. Cek profil di **Tentang Saya**
     """)
@@ -369,9 +383,7 @@ with st.sidebar:
         st.warning("Notebook belum tersedia", icon="⚠️")
 
     st.markdown("""
-    <div style='text-align:center; margin-top:2rem; padding-top:1rem;
-                border-top:1px solid #e2e8f0; color:#94a3b8; font-size:0.75rem;'><br/>© 2026 Saffa Dhiya
-    </div>
+    <div class='sidebar-copyright'><br/>© 2026 Saffa Dhiya</div>
     """, unsafe_allow_html=True)
 
 
@@ -495,18 +507,18 @@ def page_prediksi():
             st.markdown(f"""
             <div class='result-success'>
               <div style='font-size:3.5rem;'>✅</div>
-              <h2 style='margin:0.5rem 0;'>Nasabah BERPOTENSI Membuka Deposito</h2>
+              <h2 style='margin:0.5rem 0; color:white;'>Nasabah BERPOTENSI Membuka Deposito</h2>
               <div style='font-size:2.5rem;font-weight:800;margin-top:0.5rem;'>{prob_yes:.1f}%</div>
-              <p style='opacity:0.9;margin-top:0.5rem;'>Probabilitas ketertarikan</p>
+              <p style='opacity:0.9;margin-top:0.5rem; color:white;'>Probabilitas ketertarikan</p>
             </div>
             """, unsafe_allow_html=True)
         else:
             st.markdown(f"""
             <div class='result-fail'>
               <div style='font-size:3.5rem;'>❌</div>
-              <h2 style='margin:0.5rem 0;'>Nasabah TIDAK Berpotensi Membuka Deposito</h2>
+              <h2 style='margin:0.5rem 0; color:white;'>Nasabah TIDAK Berpotensi Membuka Deposito</h2>
               <div style='font-size:2.5rem;font-weight:800;margin-top:0.5rem;'>{100-prob_yes:.1f}%</div>
-              <p style='opacity:0.9;margin-top:0.5rem;'>Probabilitas tidak tertarik</p>
+              <p style='opacity:0.9;margin-top:0.5rem; color:white;'>Probabilitas tidak tertarik</p>
             </div>
             """, unsafe_allow_html=True)
 
@@ -1002,3 +1014,5 @@ st.markdown("""
   © 2026, dibuat oleh <b>Saffa Dhiya Ur Rahma</b> • Powered by Streamlit
 </div>
 """, unsafe_allow_html=True)
+
+```
