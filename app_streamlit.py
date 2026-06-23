@@ -331,7 +331,7 @@ with st.sidebar:
       <div style='font-size:2.5rem;'>💎</div>
       <div class='sidebar-title'>Deposit Predictor</div>
       <div style='color:#000000; font-size:0.8rem;'>Premium ML Dashboard</div>
-      <color: #000000>
+      <color: #fffff>
     </div>
     <hr style='margin:1rem 0; border-color:#e2e8f0;'/>
     """, unsafe_allow_html=True)
