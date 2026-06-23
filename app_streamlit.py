@@ -1014,5 +1014,3 @@ st.markdown("""
   © 2026, dibuat oleh <b>Saffa Dhiya Ur Rahma</b> • Powered by Streamlit
 </div>
 """, unsafe_allow_html=True)
-
-```
