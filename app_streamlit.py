@@ -709,5 +709,3 @@ st.markdown(f"""
   © 2026, dibuat oleh <b>Saffa Dhiya Ur Rahma</b>
 </div>
 """, unsafe_allow_html=True)
-
-```
