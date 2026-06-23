@@ -1,4 +1,4 @@
-# 1. IMPORTS
+# 1. IMPPORTS
 
 import os
 import json
@@ -103,12 +103,12 @@ CUSTOM_CSS = f"""
         color: {text_main} !important;
     }}
 
-    /* Force global text color based on theme */
-    .stMarkdown div p, h1, h2, h3, h4, h5, h6, span {{
+    /* Force global text color berdasarkan tema aktif */
+    .stMarkdown div p, h1, h2, h3, h4, h5, h6, span, label {{
         color: {text_main} !important;
     }}
 
-    /* ---------- Perbaikan Total Baca Teks Input & Label ---------- */
+    /* ---------- Perbaikan Baca Teks Input & Label ---------- */
     div[data-testid="stWidgetLabel"] p, 
     label, 
     .stSlider p,
@@ -187,7 +187,7 @@ CUSTOM_CSS = f"""
         font-weight: 600;
     }}
 
-    /* ---------- Profile Card Bulat Estetik ---------- */
+    /* ---------- Profile Card ---------- */
     .profile-card {{
         background: {card_bg};
         border-radius: 24px;
@@ -306,15 +306,6 @@ CUSTOM_CSS = f"""
         color: white !important;
     }}
 
-    /* ---------- Notebook Output ---------- */
-    .notebook-text-output {{
-        background-color: #0f172a !important;
-        color: #f8fafc !important;
-        padding: 1rem;
-        border-radius: 8px;
-        font-family: 'Courier New', Courier, monospace;
-    }}
-
     .footer {{
         text-align: center; padding: 2rem 1rem 1rem;
         color: #64748b; font-size: 0.9rem;
@@ -334,7 +325,7 @@ st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 DATA_PATH       = "bank-full.csv"
 NOTEBOOK_PATH   = "notebook.ipynb"
 MODEL_PATH      = "model_deposito.joblib"
-PROFILE_IMG     = "assets/saffa.png"  
+PROFILE_IMG     = "assets/fotoprofile.jpeg"  
 DATASET_SOURCE  = "https://archive.ics.uci.edu/ml/datasets/Bank+Marketing"
 
 
@@ -382,11 +373,6 @@ def image_to_base64(path: str) -> str | None:
         return None
     with open(path, "rb") as f:
         return base64.b64encode(f.read()).decode()
-
-
-def clean_ansi_codes(text: str) -> str:
-    ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
-    return ansi_escape.sub('', text)
 
 
 # 7. SISA SIDEBAR INFO
@@ -639,7 +625,7 @@ def page_tentang_aplikasi():
     """, unsafe_allow_html=True)
 
 
-# 12. HALAMAN: ANALISIS DATA
+# 12. HALAMAN: ANALISIS DATA (DENGAN RENDER JUPYTER NOTEBOOK LENGKAP)
 
 def page_analisis_data():
     st.markdown("""
@@ -655,9 +641,54 @@ def page_analisis_data():
         df = load_dataset()
         if df is not None:
             st.dataframe(df.head(20), use_container_width=True)
+        else:
+            st.warning("File dataset bank-full.csv belum ditemukan.")
+
     with tab2:
-        if os.path.exists(NOTEBOOK_PATH):
-            st.info("Notebook dimuat di latar belakang.")
+        st.markdown("""
+        <div class='premium-card'>
+          <h4 style='margin-top:0;'>📓 Dokumentasi Jupyter Notebook</h4>
+          <p style='margin:0;'>Berikut adalah seluruh alur pengerjaan kode, pembersihan data, dan output dari berkas notebook eksternal Anda.</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+        if not os.path.exists(NOTEBOOK_PATH):
+            st.warning(f"⚠️ Berkas notebook `{NOTEBOOK_PATH}` tidak ditemukan di direktori utama project Anda.", icon="📂")
+            return
+
+        try:
+            with open(NOTEBOOK_PATH, "r", encoding="utf-8") as f:
+                nb = json.load(f)
+            
+            # Melakukan perulangan isi sel notebook jupyter
+            for i, cell in enumerate(nb.get("cells", []), start=1):
+                ctype = cell.get("cell_type", "")
+                source = "".join(cell.get("source", []))
+
+                if ctype == "markdown":
+                    st.markdown(f"<div class='premium-card' style='border-left:4px solid #1e3a8a;'>{source}</div>", unsafe_allow_html=True)
+
+                elif ctype == "code":
+                    st.markdown(f"<div style='color:#64748b; font-size:0.8rem; font-weight:600; margin:1rem 0 0.3rem;'>▶ Cell Code [{i}]</div>", unsafe_allow_html=True)
+                    st.code(source, language="python")
+
+                    # Merender output visual/teks dari sel notebook
+                    for out in cell.get("outputs", []):
+                        ot = out.get("output_type")
+                        if ot == "stream":
+                            st.text("".join(out.get("text", [])))
+                        elif ot in ("execute_result", "display_data"):
+                            data = out.get("data", {})
+                            if "image/png" in data:
+                                st.image(base64.b64decode(data["image/png"]))
+                            elif "text/html" in data:
+                                st.markdown("".join(data["text/html"]), unsafe_allow_html=True)
+                            elif "text/plain" in data:
+                                st.text("".join(data["text/plain"]))
+                        elif ot == "error":
+                            st.error("\n".join(out.get("traceback", [])))
+        except Exception as e:
+            st.error(f"Gagal membaca notebook: {e}")
 
 
 # 13. ROUTING
