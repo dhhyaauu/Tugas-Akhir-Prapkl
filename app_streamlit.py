@@ -40,7 +40,7 @@ st.set_page_config(
 )
 
 
-# 3. CUSTOM CSS — TEMA NAVY / PUTIH / ABU / HITAM ELEGAN
+# 3. CUSTOM CSS 
 
 CUSTOM_CSS = """
 <style>
@@ -238,7 +238,7 @@ CUSTOM_CSS = """
         color: white !important;
     }
 
-    /* ---------- Result Card (prediksi) — Animasi Baru ---------- */
+    /* ---------- Result Card (prediksi) */
     .result-success {
         background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
         color: white; padding: 2rem; border-radius: 20px;
@@ -450,7 +450,6 @@ def page_prediksi():
     if df is None:
         st.warning("Dataset belum tersedia. Form prediksi akan menggunakan opsi default.", icon="📂")
 
-    # ------ Form Input ------
     st.markdown("<div class='section-title'>📝 Data Nasabah</div>", unsafe_allow_html=True)
 
     with st.form("predict_form"):
@@ -486,7 +485,6 @@ def page_prediksi():
         st.markdown("<br/>", unsafe_allow_html=True)
         submitted = st.form_submit_button("🚀 Prediksi Sekarang", use_container_width=True)
 
-    # ------ Proses Prediksi ------
     if submitted:
         with st.spinner("🔄 Sedang memproses prediksi..."):
             import time; time.sleep(1)
@@ -499,7 +497,6 @@ def page_prediksi():
                     "contact":contact,"day":day,"month":month,"duration":duration,
                     "campaign":campaign,"pdays":pdays,"previous":previous,"poutcome":poutcome,
                 }])
-                # encode
                 for col, le in bundle["encoders"].items():
                     if col == "y": continue
                     try:
@@ -513,33 +510,30 @@ def page_prediksi():
                 prob_yes = proba[yes_idx] * 100
                 hasil = "yes" if pred == yes_idx else "no"
             else:
-                # Dummy fallback
                 prob_yes = np.random.uniform(20, 80)
                 hasil = "yes" if prob_yes >= 50 else "no"
 
-        # ------ Tampilan Hasil ------
         st.markdown("<div class='section-title'>🎯 Hasil Prediksi</div>", unsafe_allow_html=True)
 
         if hasil == "yes":
             st.markdown(f"""
             <div class='result-success'>
               <div style='font-size:3.5rem;'>✅</div>
-              <h2 style='margin:0.5rem 0; color:white;'>Nasabah BERPOTENSI Membuka Deposito</h2>
+              <h2 style='margin:0.5rem 0;'>Nasabah BERPOTENSI Membuka Deposito</h2>
               <div style='font-size:2.5rem;font-weight:800;margin-top:0.5rem;'>{prob_yes:.1f}%</div>
-              <p style='opacity:0.9;margin-top:0.5rem; color:white;'>Probabilitas ketertarikan</p>
+              <p style='opacity:0.9;margin-top:0.5rem;'>Probabilitas ketertarikan</p>
             </div>
             """, unsafe_allow_html=True)
         else:
             st.markdown(f"""
             <div class='result-fail'>
               <div style='font-size:3.5rem;'>❌</div>
-              <h2 style='margin:0.5rem 0; color:white;'>Nasabah TIDAK Berpotensi Membuka Deposito</h2>
+              <h2 style='margin:0.5rem 0;'>Nasabah TIDAK Berpotensi Membuka Deposito</h2>
               <div style='font-size:2.5rem;font-weight:800;margin-top:0.5rem;'>{100-prob_yes:.1f}%</div>
-              <p style='opacity:0.9;margin-top:0.5rem; color:white;'>Probabilitas tidak tertarik</p>
+              <p style='opacity:0.9;margin-top:0.5rem;'>Probabilitas tidak tertarik</p>
             </div>
             """, unsafe_allow_html=True)
 
-        # Gauge chart
         col1, col2 = st.columns(2)
         with col1:
             fig = go.Figure(go.Indicator(
@@ -566,7 +560,6 @@ def page_prediksi():
             fig.update_layout(height=320, paper_bgcolor="white")
             st.plotly_chart(fig, use_container_width=True)
 
-        # Interpretasi
         st.markdown("<div class='section-title'>📖 Interpretasi Hasil</div>", unsafe_allow_html=True)
         if hasil == "yes":
             interpret = ("Model memprediksi nasabah ini memiliki kecenderungan tinggi "
