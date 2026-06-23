@@ -21,7 +21,7 @@ except ImportError:
     st.error("Install dulu: pip install streamlit-option-menu")
     st.stop()
 
-# Scikit-learn (untuk fallback model jika model.pkl belum ada)
+# Scikit-learn
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.ensemble import RandomForestClassifier
@@ -40,7 +40,7 @@ st.set_page_config(
 )
 
 
-# 3. CUSTOM CSS — TEMA NAVY / PUTIH / ABU / HITAM ELEGAN
+# 3. CUSTOM CSS 
 
 CUSTOM_CSS = """
 <style>
@@ -137,7 +137,7 @@ CUSTOM_CSS = """
     }
     .profile-img {
         width: 180px; height: 180px;
-        border-radius: 50%;
+        border-radius: 100%;
         object-fit: cover;
         border: 6px solid white;
         box-shadow: 0 10px 30px rgba(10, 31, 68, 0.2);
@@ -241,14 +241,14 @@ CUSTOM_CSS = """
     /* ---------- Result Card (prediksi) — Animasi Baru ---------- */
     .result-success {
         background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
-        color: white; padding: 2rem; border-radius: 20px;
+        color: black; padding: 2rem; border-radius: 20px;
         text-align: center;
         box-shadow: 0 15px 50px rgba(4, 120, 87, 0.4);
         animation: resultPulse 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
     }
     .result-fail {
         background: linear-gradient(135deg, #7f1d1d 0%, #b91c1c 100%);
-        color: white; padding: 2rem; border-radius: 20px;
+        color: black; padding: 2rem; border-radius: 20px;
         text-align: center;
         box-shadow: 0 15px 50px rgba(185, 28, 28, 0.4);
         animation: resultPulse 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
@@ -299,7 +299,7 @@ st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 DATA_PATH       = "bank-full.csv"
 NOTEBOOK_PATH   = "notebook.ipynb"
 MODEL_PATH      = "model_deposito.joblib"
-PROFILE_IMG     = "assets/fotoprofile.jpeg"
+PROFILE_IMG     = "assets/saffa.png"
 DATASET_SOURCE  = "[https://archive.ics.uci.edu/ml/datasets/Bank+Marketing](https://archive.ics.uci.edu/ml/datasets/Bank+Marketing)"
 
 
