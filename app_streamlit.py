@@ -4,7 +4,6 @@ import os
 import json
 import base64
 import warnings
-import re
 from pathlib import Path
 
 import numpy as np
@@ -14,6 +13,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
 import plotly.graph_objects as go
+
 
 try:
     from streamlit_option_menu import option_menu
@@ -54,7 +54,13 @@ CUSTOM_CSS = """
     /* ---------- Background ---------- */
     .stApp {
         background: linear-gradient(135deg, #f7f9fc 0%, #eef2f7 100%);
-        color: #000000; /* Perbaikan: Ditambahkan titik koma agar tidak merusak elemen text di bawahnya */
+    }
+
+    /* ---------- Form & Input Label Fix ---------- */
+    .stApp label p {
+        color: #0a1f44 !important;
+        font-weight: 600 !important;
+        font-size: 0.95rem !important;
     }
 
     /* ---------- Header Gradient ---------- */
@@ -80,11 +86,12 @@ CUSTOM_CSS = """
         font-family: 'Plus Jakarta Sans', sans-serif;
         font-size: 2.4rem; font-weight: 800;
         margin: 0; letter-spacing: -0.5px;
+        color: #ffffff !important;
     }
     .hero-header p {
-        opacity: 0.85;
-        font-size: 1.05rem;
+        opacity: 0.85; font-size: 1.05rem;
         margin-top: 0.5rem; font-weight: 400;
+        color: #ffffff !important;
     }
 
     /* ---------- Card ---------- */
@@ -96,6 +103,7 @@ CUSTOM_CSS = """
         border: 1px solid rgba(15, 23, 42, 0.05);
         transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         margin-bottom: 1rem;
+        color: #0a1f44;
     }
     .premium-card:hover {
         transform: translateY(-4px);
@@ -113,13 +121,11 @@ CUSTOM_CSS = """
     }
     .metric-card:hover { transform: translateY(-2px); }
     .metric-value {
-        font-size: 2rem;
-        font-weight: 800; color: #0a1f44;
+        font-size: 2rem; font-weight: 800; color: #0a1f44;
         font-family: 'Plus Jakarta Sans', sans-serif;
     }
     .metric-label {
-        color: #64748b;
-        font-size: 0.85rem;
+        color: #64748b; font-size: 0.85rem;
         text-transform: uppercase; letter-spacing: 0.5px;
         font-weight: 600;
     }
@@ -138,24 +144,13 @@ CUSTOM_CSS = """
         transform: translateY(-8px);
         box-shadow: 0 30px 80px rgba(10, 31, 68, 0.18);
     }
-    .profile-img {
-        width: 180px;
-        height: 180px;
-        border-radius: 100%;
-        object-fit: cover;
-        border: 6px solid white;
-        box-shadow: 0 10px 30px rgba(10, 31, 68, 0.2);
-        margin-bottom: 1.25rem;
-    }
     .profile-name {
         font-family: 'Plus Jakarta Sans', sans-serif;
-        font-size: 1.75rem;
-        font-weight: 800;
+        font-size: 1.75rem; font-weight: 800;
         color: #0a1f44; margin: 0.5rem 0 0.25rem;
     }
     .profile-role {
-        color: #1e3a8a;
-        font-weight: 600;
+        color: #1e3a8a; font-weight: 600;
         font-size: 0.95rem; margin-bottom: 1rem;
     }
     .social-icon {
@@ -173,8 +168,7 @@ CUSTOM_CSS = """
         transition: all 0.3s ease;
     }
     .social-icon:hover {
-        background: #0a1f44;
-        color: white;
+        background: #0a1f44; color: white;
         transform: translateY(-3px);
     }
 
@@ -202,6 +196,7 @@ CUSTOM_CSS = """
     .stButton>button:hover {
         transform: translateY(-2px);
         box-shadow: 0 8px 24px rgba(10, 31, 68, 0.35) !important;
+        color: white !important;
     }
 
     /* ---------- Sidebar ---------- */
@@ -213,7 +208,7 @@ CUSTOM_CSS = """
     [data-testid="stSidebar"] h3, 
     [data-testid="stSidebar"] span, 
     [data-testid="stSidebar"] div {
-        color: #0f172a !important;
+        color: #0f172a !important; 
     }
     [data-testid="stSidebar"] .sidebar-title {
         font-family: 'Plus Jakarta Sans', sans-serif;
@@ -221,12 +216,10 @@ CUSTOM_CSS = """
         color: #000000 !important; margin-bottom: 0.5rem;
     }
     [data-testid="stSidebar"] .sidebar-subtitle {
-        color: #475569 !important;
-        font-size: 0.85rem; font-weight: 600;
+        color: #475569 !important; font-size: 0.85rem; font-weight: 600;
     }
     [data-testid="stSidebar"] .sidebar-copyright {
-        color: #94a3b8 !important;
-        font-size: 0.75rem; text-align: center; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;
+        color: #94a3b8 !important; font-size: 0.75rem; text-align: center; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;
     }
 
     /* ---------- Tabs ---------- */
@@ -250,19 +243,23 @@ CUSTOM_CSS = """
     /* ---------- Result Card (prediksi) — Animasi Baru ---------- */
     .result-success {
         background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
-        color: white !important; /* Diubah ke white agar teks terbaca jelas */
-        padding: 2rem; border-radius: 20px;
+        color: #ffffff !important; padding: 2rem; border-radius: 20px;
         text-align: center;
         box-shadow: 0 15px 50px rgba(4, 120, 87, 0.4);
         animation: resultPulse 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
     }
+    .result-success div, .result-success h2, .result-success p {
+        color: #ffffff !important;
+    }
     .result-fail {
         background: linear-gradient(135deg, #7f1d1d 0%, #b91c1c 100%);
-        color: white !important; /* Diubah ke white agar teks terbaca jelas */
-        padding: 2rem; border-radius: 20px;
+        color: #ffffff !important; padding: 2rem; border-radius: 20px;
         text-align: center;
         box-shadow: 0 15px 50px rgba(185, 28, 28, 0.4);
         animation: resultPulse 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    }
+    .result-fail div, .result-fail h2, .result-fail p {
+        color: #ffffff !important;
     }
     
     /* Keyframe Animasi Baru */
@@ -280,7 +277,7 @@ CUSTOM_CSS = """
     /* ---------- Notebook Output Styling Fix ---------- */
     .notebook-text-output {
         background-color: #0f172a !important;
-        color: #f8fafc !important; /* Memaksa teks output notebook berwarna cerah */
+        color: #f8fafc !important;
         padding: 1rem;
         border-radius: 8px;
         font-family: 'Courier New', Courier, monospace;
@@ -293,8 +290,7 @@ CUSTOM_CSS = """
 
     /* ---------- Footer ---------- */
     .footer {
-        text-align: center;
-        padding: 2rem 1rem 1rem;
+        text-align: center; padding: 2rem 1rem 1rem;
         color: #64748b; font-size: 0.9rem;
         border-top: 1px solid rgba(15,23,42,0.08);
         margin-top: 3rem;
@@ -305,7 +301,6 @@ CUSTOM_CSS = """
 </style>
 """
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
-
 
 # 4. KONSTANTA & PATH
 
@@ -363,7 +358,7 @@ def image_to_base64(path: str) -> str | None:
     with open(path, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
-
+import re
 def clean_ansi_codes(text: str) -> str:
     """Membersihkan kode warna terminal (ANSI) agar teks terbaca murni."""
     ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
@@ -407,16 +402,17 @@ with st.sidebar:
     if df_check is not None:
         st.success(f"Dataset: ✓ ({len(df_check):,} baris)", icon="✅")
     else:
-        st.warning("Dataset belum tersedia (Taruh file `bank-full.csv`)", icon="⚠️")
+        st.warning("Dataset belum tersedia", icon="⚠️")
 
     if os.path.exists(NOTEBOOK_PATH):
         st.success("Notebook: ✓", icon="✅")
     else:
-        st.warning("Notebook belum tersedia (Taruh file `notebook.ipynb`)", icon="⚠️")
+        st.warning("Notebook belum tersedia", icon="⚠️")
 
     st.markdown("""
     <div class='sidebar-copyright'><br/>© 2026 Saffa Dhiya</div>
     """, unsafe_allow_html=True)
+
 
 
 # 7. NAVBAR HORIZONTAL
@@ -450,8 +446,7 @@ selected = option_menu(
     },
 )
 
-
-# 8. HALAMAN: PREDIKSI
+# 11. HALAMAN: PREDIKSI
 
 def page_prediksi():
     st.markdown("""
@@ -473,7 +468,7 @@ def page_prediksi():
         with c1:
             age      = st.number_input("👤 Usia", 18, 100, 35, help="Usia nasabah dalam tahun")
             job      = st.selectbox("💼 Pekerjaan",
-                    ["admin.","blue-collar","entrepreneur","housemaid","management",
+                        ["admin.","blue-collar","entrepreneur","housemaid","management",
                          "retired","self-employed","services","student","technician",
                          "unemployed","unknown"], help="Jenis pekerjaan")
             marital  = st.selectbox("💍 Status", ["married","single","divorced"])
@@ -495,7 +490,8 @@ def page_prediksi():
             campaign = st.number_input("📣 Jumlah Kampanye", 1, 100, 2)
             pdays    = st.number_input("🔁 Hari sejak terakhir", -1, 999, -1)
             previous = st.number_input("📊 Kontak Sebelumnya", 0, 100, 0)
-            poutcome = st.selectbox("🎯 Hasil Kampanye Lalu", ["unknown","other","failure","success"])
+            poutcome = st.selectbox("🎯 Hasil Kampanye Lalu",
+                        ["unknown","other","failure","success"])
 
         st.markdown("<br/>", unsafe_allow_html=True)
         submitted = st.form_submit_button("🚀 Prediksi Sekarang", use_container_width=True)
@@ -503,8 +499,7 @@ def page_prediksi():
     # ------ Proses Prediksi ------
     if submitted:
         with st.spinner("🔄 Sedang memproses prediksi..."):
-            import time
-            time.sleep(1)
+            import time; time.sleep(1)
 
             if df is not None:
                 bundle = train_fallback_model(df)
@@ -539,22 +534,22 @@ def page_prediksi():
             st.markdown(f"""
             <div class='result-success'>
               <div style='font-size:3.5rem;'>✅</div>
-              <h2 style='margin:0.5rem 0; color:white;'>Nasabah BERPOTENSI Membuka Deposito</h2>
+              <h2 style='margin:0.5rem 0;'>Nasabah BERPOTENSI Membuka Deposito</h2>
               <div style='font-size:2.5rem;font-weight:800;margin-top:0.5rem;'>{prob_yes:.1f}%</div>
-              <p style='opacity:0.9;margin-top:0.5rem; color:white;'>Probabilitas ketertarikan</p>
+              <p style='opacity:0.9;margin-top:0.5rem;'>Probabilitas ketertarikan</p>
             </div>
             """, unsafe_allow_html=True)
         else:
             st.markdown(f"""
             <div class='result-fail'>
               <div style='font-size:3.5rem;'>❌</div>
-              <h2 style='margin:0.5rem 0; color:white;'>Nasabah TIDAK Berpotensi Membuka Deposito</h2>
+              <h2 style='margin:0.5rem 0;'>Nasabah TIDAK Berpotensi Membuka Deposito</h2>
               <div style='font-size:2.5rem;font-weight:800;margin-top:0.5rem;'>{100-prob_yes:.1f}%</div>
-              <p style='opacity:0.9;margin-top:0.5rem; color:white;'>Probabilitas tidak tertarik</p>
+              <p style='opacity:0.9;margin-top:0.5rem;'>Probabilitas tidak tertarik</p>
             </div>
             """, unsafe_allow_html=True)
 
-        # Perbaikan: Mengubah paper dan plot bgcolor menjadi transparan agar Chart Plotly terlihat
+        # Gauge chart & Pie Chart
         col1, col2 = st.columns(2)
         with col1:
             fig = go.Figure(go.Indicator(
@@ -571,15 +566,34 @@ def page_prediksi():
                     ],
                 }
             ))
-            fig.update_layout(height=320, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
+            fig.update_layout(height=320, paper_bgcolor="white")
             st.plotly_chart(fig, use_container_width=True)
+            
+            # Penjelasan Chart 1
+            st.markdown(f"""
+            <div class='premium-card' style='margin-top:-20px;'>
+                <b>📌 Penjelasan Gauge Chart:</b><br/>
+                Grafik di atas menunjukkan tingkat keyakinan model secara linear. 
+                Saat ini jarum berada di angka <b>{prob_yes:.1f}%</b>. 
+                Zonasi warna menunjukkan kategori potensi: Merah (Rendah), Kuning (Sedang), dan Hijau (Tinggi).
+            </div>
+            """, unsafe_allow_html=True)
 
         with col2:
             fig = px.pie(values=[prob_yes, 100 - prob_yes],
                          names=["Tertarik", "Tidak Tertarik"], hole=0.55,
                          color_discrete_sequence=["#1e3a8a", "#cbd5e1"])
-            fig.update_layout(height=320, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
+            fig.update_layout(height=320, paper_bgcolor="white")
             st.plotly_chart(fig, use_container_width=True)
+            
+            # Penjelasan Chart 2
+            st.markdown(f"""
+            <div class='premium-card' style='margin-top:-20px;'>
+                <b>📌 Penjelasan Donut Chart:</b><br/>
+                Grafik lingkaran ini membandingkan proporsi antara peluang nasabah <b>Tertarik (Warna Biru: {prob_yes:.1f}%)</b> 
+                dengan peluang nasabah <b>Tidak Tertarik (Warna Abu-abu: {100-prob_yes:.1f}%)</b> untuk membuka akun deposito berjangka.
+            </div>
+            """, unsafe_allow_html=True)
 
         # Interpretasi
         st.markdown("<div class='section-title'>📖 Interpretasi Hasil</div>", unsafe_allow_html=True)
@@ -592,6 +606,71 @@ def page_prediksi():
                          "Disarankan untuk fokus pada nasabah dengan potensi lebih tinggi "
                          "atau mengubah pendekatan marketing.")
         st.markdown(f"<div class='premium-card'>{interpret}</div>", unsafe_allow_html=True)
+
+# 8. HALAMAN: TENTANG SAYA
+def page_tentang_saya():
+    st.markdown("""
+    <div class='hero-header fade-in'>
+      <h1>👤 Tentang Saya</h1>
+      <p>Berkenalan dengan pengembang aplikasi ini</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    col1, col2 = st.columns([1, 1.5], gap="large")
+
+    with col1:
+        if os.path.exists(PROFILE_IMG):
+            st.image(PROFILE_IMG, width=220)
+        else:
+            st.warning("Foto profile tidak ditemukan")
+
+    with col2:
+        st.markdown("<div class='section-title'>📋 Informasi Pribadi</div>", unsafe_allow_html=True)
+
+        st.markdown("""
+        <div class='profile-card'>
+          <div class='profile-name'>Saffa Dhiya Ur Rahma</div>
+          <div class='profile-role'>Rekayasa Perangkat Lunak</div>
+          <p style='color:#64748b; font-size:0.95rem; line-height:1.6;'>
+            Passionate dalam <b>Data Science</b> & <b>Machine Learning</b>.
+            Menyukai eksplorasi data, membangun model prediksi, dan
+            merancang dashboard analitik yang informatif.
+          </p>
+
+          <div style='margin-top:1.25rem;'>
+            <a href='mailto:saffadhiyaa1012@gmail.com' class='social-icon'>✉️</a>
+            <a href='https://github.com/dhhyaauu' target='_blank' class='social-icon'>🐙</a>
+            <a href='#' class='social-icon'>📷</a>
+          </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        info_items = [
+            ("👤", "Nama Lengkap", "Saffa Dhiya Ur Rahma"),
+            ("🎓", "Jurusan", "Rekayasa Perangkat Lunak"),
+            ("✉️", "Email", "saffadhiyaa1012@gmail.com"),
+            ("🔗", "Github", "[github.com/dhhyaauu](https://github.com/dhhyaauu)"),
+            ("💡", "Minat", "Data Science • Machine Learning • Web Dev"),
+        ]
+
+        for icon, label, val in info_items:
+            st.markdown(f"""
+            <div class='premium-card' style='display:flex;align-items:center;gap:1rem;padding:1.2rem 1.5rem;'>
+              <div style='font-size:1.6rem;width:48px;height:48px;background:#eef2f7;
+                          border-radius:12px;display:flex;align-items:center;justify-content:center;'>
+                {icon}
+              </div>
+              <div>
+                <div style='color:#64748b;font-size:0.78rem;text-transform:uppercase;
+                            letter-spacing:0.5px;font-weight:600;'>
+                    {label}
+                </div>
+                <div style='color:#0a1f44;font-weight:600;font-size:1rem;'>
+                    {val}
+                </div>
+              </div>
+            </div>
+            """, unsafe_allow_html=True)
 
 
 # 9. HALAMAN: TENTANG APLIKASI
@@ -610,7 +689,8 @@ def page_tentang_aplikasi():
       Aplikasi ini adalah <b>dashboard machine learning</b> yang dirancang untuk
       memprediksi apakah seorang nasabah akan tertarik membuka produk
       <b>deposito berjangka</b> berdasarkan karakteristik demografis,
-      finansial, dan historis kampanye marketing sebelumnya.<br/><br/>
+      finansial, dan historis kampanye marketing sebelumnya.
+      <br/><br/>
       Dataset bersumber dari <b>UCI Machine Learning Repository — Bank Marketing</b>,
       yang berisi data nyata kampanye pemasaran langsung dari sebuah
       lembaga perbankan di Portugal.
@@ -666,7 +746,7 @@ def page_tentang_aplikasi():
         </div>
         """, unsafe_allow_html=True)
 
-    st.markdown("<div class='section-title'>📌 Manfaat Aplikasi</div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-title'>💼 Manfaat Aplikasi</div>", unsafe_allow_html=True)
     benefits = [
         "✅ Membantu bank menentukan target nasabah potensial",
         "✅ Meningkatkan efektivitas kampanye marketing",
@@ -681,12 +761,13 @@ def page_tentang_aplikasi():
     <div style='background:linear-gradient(135deg,#0a1f44,#1e3a8a);color:white;
                 padding:2rem;border-radius:20px;text-align:center;margin-top:2rem;
                 box-shadow:0 15px 50px rgba(10,31,68,0.25);'>
-      <h3 style='margin:0 0 0.5rem;'>🚀 Siap Mencoba?</h3>
-      <p style='margin:0;opacity:0.9;'>
+      <h3 style='margin:0 0 0.5rem; color:white;'>🚀 Siap Mencoba?</h3>
+      <p style='margin:0;opacity:0.9; color:white;'>
         Klik menu <b>Prediksi</b> di atas untuk mencoba model prediksi kami!
       </p>
     </div>
     """, unsafe_allow_html=True)
+
 
 
 # 10. HALAMAN: ANALISIS DATA
@@ -710,7 +791,8 @@ def page_analisis_data():
 def render_tab_dataset():
     df = load_dataset()
     if df is None:
-        st.warning(f"⚠️ Dataset `{DATA_PATH}` tidak ditemukan. Silakan letakkan file dataset di root folder proyek Anda.", icon="📂")
+        st.warning(f"⚠️ Dataset `{DATA_PATH}` tidak ditemukan. "
+                   "Silakan upload file dataset terlebih dahulu.", icon="📂")
         return
 
     # ------ Info Sumber ------
@@ -730,10 +812,16 @@ def render_tab_dataset():
 
     # ------ Metric ------
     c1, c2, c3, c4 = st.columns(4)
-    c1.markdown(f"<div class='metric-card'><div class='metric-label'>Total Baris</div><div class='metric-value'>{len(df):,}</div></div>", unsafe_allow_html=True)
-    c2.markdown(f"<div class='metric-card'><div class='metric-label'>Total Kolom</div><div class='metric-value'>{df.shape[1]}</div></div>", unsafe_allow_html=True)
-    c3.markdown(f"<div class='metric-card'><div class='metric-label'>Kolom Numerik</div><div class='metric-value'>{len(df.select_dtypes(include=np.number).columns)}</div></div>", unsafe_allow_html=True)
-    c4.markdown(f"<div class='metric-card'><div class='metric-label'>Kolom Kategorik</div><div class='metric-value'>{len(df.select_dtypes(include='object').columns)}</div></div>", unsafe_allow_html=True)
+    c1.markdown(f"<div class='metric-card'><div class='metric-label'>Total Baris</div>"
+                f"<div class='metric-value'>{len(df):,}</div></div>", unsafe_allow_html=True)
+    c2.markdown(f"<div class='metric-card'><div class='metric-label'>Total Kolom</div>"
+                f"<div class='metric-value'>{df.shape[1]}</div></div>", unsafe_allow_html=True)
+    c3.markdown(f"<div class='metric-card'><div class='metric-label'>Kolom Numerik</div>"
+                f"<div class='metric-value'>{len(df.select_dtypes(include=np.number).columns)}</div></div>",
+                unsafe_allow_html=True)
+    c4.markdown(f"<div class='metric-card'><div class='metric-label'>Kolom Kategorik</div>"
+                f"<div class='metric-value'>{len(df.select_dtypes(include='object').columns)}</div></div>",
+                unsafe_allow_html=True)
 
     # ------ Preview ------
     st.markdown("<div class='section-title'>🔍 Preview Dataset</div>", unsafe_allow_html=True)
@@ -770,7 +858,8 @@ def render_tab_dataset():
         fig = px.bar(target, x="Kelas", y="Jumlah", color="Kelas",
                      color_discrete_sequence=["#0a1f44", "#1e3a8a"],
                      text="Jumlah")
-        fig.update_layout(showlegend=False, height=380, plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)")
+        fig.update_layout(showlegend=False, height=380,
+                          plot_bgcolor="white", paper_bgcolor="white")
         st.plotly_chart(fig, use_container_width=True)
 
     # ------ Distribusi Numerik ------
@@ -778,7 +867,7 @@ def render_tab_dataset():
     num_cols = df.select_dtypes(include=np.number).columns.tolist()
     sel = st.selectbox("Pilih kolom numerik:", num_cols, key="hist_col")
     fig = px.histogram(df, x=sel, nbins=40, color_discrete_sequence=["#1e3a8a"])
-    fig.update_layout(height=380, plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)")
+    fig.update_layout(height=380, plot_bgcolor="white", paper_bgcolor="white")
     st.plotly_chart(fig, use_container_width=True)
 
     # ------ Distribusi Kategorikal ------
@@ -787,14 +876,16 @@ def render_tab_dataset():
     sel2 = st.selectbox("Pilih kolom kategorik:", cat_cols, key="cat_col")
     cat_data = df[sel2].value_counts().reset_index()
     cat_data.columns = [sel2, "Jumlah"]
-    fig = px.bar(cat_data, x=sel2, y="Jumlah", color_discrete_sequence=["#0a1f44"])
-    fig.update_layout(height=380, plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)")
+    fig = px.bar(cat_data, x=sel2, y="Jumlah",
+                 color_discrete_sequence=["#0a1f44"])
+    fig.update_layout(height=380, plot_bgcolor="white", paper_bgcolor="white")
     st.plotly_chart(fig, use_container_width=True)
 
     # ------ Heatmap Korelasi ------
     st.markdown("<div class='section-title'>🔥 Heatmap Korelasi</div>", unsafe_allow_html=True)
     fig, ax = plt.subplots(figsize=(10, 6))
-    sns.heatmap(df[num_cols].corr(), annot=True, cmap="Blues", fmt=".2f", linewidths=0.5, ax=ax)
+    sns.heatmap(df[num_cols].corr(), annot=True, cmap="Blues", fmt=".2f",
+                linewidths=0.5, ax=ax)
     st.pyplot(fig)
 
     # ------ Insight ------
@@ -803,12 +894,14 @@ def render_tab_dataset():
         yes_pct = (df["y"] == "yes").mean() * 100
         insights = [
             f"📊 Dataset berisi {len(df):,} nasabah dengan {df.shape[1]} fitur.",
-            f"🎯 Hanya {yes_pct:.2f}% nasabah yang setuju membuka deposito → kelas tidak seimbang (imbalanced).",
+            f"🎯 Hanya {yes_pct:.2f}% nasabah yang setuju membuka deposito → "
+            "kelas tidak seimbang (imbalanced).",
             f"💰 Rata-rata saldo nasabah: {df['balance'].mean():,.0f} EUR.",
             f"👤 Rata-rata usia nasabah: {df['age'].mean():.1f} tahun.",
         ]
         for ins in insights:
-            st.markdown(f"<div class='premium-card' style='padding:1rem 1.5rem;'>{ins}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='premium-card' style='padding:1rem 1.5rem;'>{ins}</div>",
+                        unsafe_allow_html=True)
 
 
 # ---------- TAB NOTEBOOK ----------
@@ -817,22 +910,24 @@ def render_tab_notebook():
     <div class='premium-card'>
       <h4 style='color:#0a1f44;margin-top:0;'>📓 Dokumentasi Notebook</h4>
       <p style='margin:0;color:#475569;'>
-        Berikut adalah seluruh kode dan output dari Jupyter Notebook yang digunakan untuk membangun model prediksi.
+        Berikut adalah seluruh kode dan output dari Jupyter Notebook yang
+        digunakan untuk membangun model prediksi.
       </p>
     </div>
     """, unsafe_allow_html=True)
 
     if not os.path.exists(NOTEBOOK_PATH):
-        st.warning(f"⚠️ File `{NOTEBOOK_PATH}` tidak ditemukan di root folder. Pastikan Anda sudah mengupload file `notebook.ipynb`.", icon="📂")
+        st.warning(f"⚠️ Notebook `{NOTEBOOK_PATH}` tidak ditemukan. "
+                   "Silakan upload file notebook terlebih dahulu.", icon="📂")
         return
 
     # Penjelasan tahapan
     stages = [
         ("🧹", "Preprocessing", "Membersihkan data, menangani missing value, encoding kategorikal."),
-        ("✨", "Cleaning", "Menghapus duplikat, outlier, dan inkonsistensi data."),
-        ("🎓", "Training", "Melatih model machine learning dengan data training."),
-        ("📏", "Evaluasi", "Mengukur performa model: accuracy, precision, recall, F1."),
-        ("🔮", "Prediksi", "Menggunakan model untuk memprediksi data baru."),
+        ("✨", "Cleaning",      "Menghapus duplikat, outlier, dan inkonsistensi data."),
+        ("🎓", "Training",      "Melatih model machine learning dengan data training."),
+        ("📏", "Evaluasi",      "Mengukur performa model: accuracy, precision, recall, F1."),
+        ("🔮", "Prediksi",      "Menggunakan model untuk memprediksi data baru."),
     ]
     cols = st.columns(5)
     for col, (icon, title, desc) in zip(cols, stages):
@@ -860,15 +955,17 @@ def render_tab_notebook():
         if ctype == "markdown":
             st.markdown(f"""
             <div class='premium-card' style='border-left:4px solid #1e3a8a;'>
-               {source}
+              {source}
             </div>
             """, unsafe_allow_html=True)
 
         elif ctype == "code":
-            st.markdown(f"<div style='color:#64748b;font-size:0.8rem;font-weight:600; margin:1rem 0 0.3rem;'>▶ Cell [{i}]</div>", unsafe_allow_html=True)
+            st.markdown(f"<div style='color:#64748b;font-size:0.8rem;font-weight:600;"
+                        f"margin:1rem 0 0.3rem;'>▶ Cell [{i}]</div>",
+                        unsafe_allow_html=True)
             st.code(source, language="python")
 
-            # Tampilkan output
+            # Tampilkan output dengan perbaikan pembacaan teks
             for out in cell.get("outputs", []):
                 ot = out.get("output_type")
                 if ot == "stream":
@@ -900,7 +997,8 @@ def render_tab_istilah():
     <div class='premium-card'>
       <h4 style='color:#0a1f44;margin-top:0;'>📚 Penjelasan Fitur Dataset</h4>
       <p style='margin:0;color:#475569;'>
-        Berikut penjelasan setiap fitur (kolom) pada dataset Bank Marketing yang digunakan sebagai input model prediksi.
+        Berikut penjelasan setiap fitur (kolom) pada dataset Bank Marketing
+        yang digunakan sebagai input model prediksi.
       </p>
     </div>
     """, unsafe_allow_html=True)
@@ -942,73 +1040,7 @@ def render_tab_istilah():
         </div>
         """, unsafe_allow_html=True)
 
-
-# 11. HALAMAN: TENTANG SAYA
-def page_tentang_saya():
-    st.markdown("""
-    <div class='hero-header fade-in'>
-      <h1>👤 Tentang Saya</h1>
-      <p>Berkenalan dengan pengembang aplikasi ini</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    col1, col2 = st.columns([1, 1.5], gap="large")
-
-    with col1:
-        if os.path.exists(PROFILE_IMG):
-            st.image(PROFILE_IMG, width=220)
-        else:
-            st.warning("Foto profile tidak ditemukan")
-
-    with col2:
-        st.markdown("<div class='section-title'>📋 Informasi Pribadi</div>", unsafe_allow_html=True)
-
-        st.markdown("""
-        <div class='profile-card'>
-          <div class='profile-name'>Saffa Dhiya Ur Rahma</div>
-          <div class='profile-role'>Rekayasa Perangkat Lunak</div>
-          <p style='color:#64748b; font-size:0.95rem; line-height:1.6;'>
-            Passionate dalam <b>Data Science</b> & <b>Machine Learning</b>.
-            Menyukai eksplorasi data, membangun model prediksi, dan
-            merancang dashboard analitik yang informatif.
-          </p>
-
-          <div style='margin-top:1.25rem;'>
-            <a href='mailto:saffadhiyaa1012@gmail.com' class='social-icon'>✉️</a>
-            <a href='https://github.com/dhhyaauu' target='_blank' class='social-icon'>🐙</a>
-            <a href='#' class='social-icon'>📷</a>
-          </div>
-        </div>
-        """, unsafe_allow_html=True)
-
-        info_items = [
-            ("👤", "Nama Lengkap", "Saffa Dhiya Ur Rahma"),
-            ("🎓", "Jurusan", "Rekayasa Perangkat Lunak"),
-            ("✉️", "Email", "saffadhiyaa1012@gmail.com"),
-            ("🔗", "Github", "github.com/dhhyaauu"),
-            ("💡", "Minat", "Data Science • Machine Learning • Web Dev"),
-        ]
-
-        for icon, label, val in info_items:
-            st.markdown(f"""
-            <div class='premium-card' style='display:flex;align-items:center;gap:1rem;padding:1.2rem 1.5rem;'>
-              <div style='font-size:1.6rem;width:48px;height:48px;background:#eef2f7;
-                          border-radius:12px;display:flex;align-items:center;justify-content:center;'>
-                {icon}
-              </div>
-              <div>
-                <div style='color:#64748b;font-size:0.78rem;text-transform:uppercase; letter-spacing:0.5px;font-weight:600;'>
-                    {label}
-                </div>
-                <div style='color:#0a1f44;font-weight:600;font-size:1rem;'>
-                    {val}
-                </div>
-              </div>
-            </div>
-            """, unsafe_allow_html=True)
-
-
-# 12. ROUTING (Urutan Eksekusi)
+# 12. ROUTING (Urutan Eksekusi Disesuaikan)
 if selected == "Prediksi":
     page_prediksi()
 elif selected == "Tentang Aplikasi":
