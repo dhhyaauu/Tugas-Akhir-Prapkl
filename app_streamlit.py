@@ -54,6 +54,7 @@ CUSTOM_CSS = """
     /* ---------- Background ---------- */
     .stApp {
         background: linear-gradient(135deg, #f7f9fc 0%, #eef2f7 100%);
+        color: #000000
     }
 
     /* ---------- Form & Input Label Fix ---------- */
@@ -566,7 +567,7 @@ def page_prediksi():
                     ],
                 }
             ))
-            fig.update_layout(height=320, paper_bgcolor="white")
+            fig.update_layout(height=320, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
             st.plotly_chart(fig, use_container_width=True)
             
             # Penjelasan Chart 1
