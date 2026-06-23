@@ -249,7 +249,7 @@ CUSTOM_CSS = """
         box-shadow: 0 15px 50px rgba(4, 120, 87, 0.4);
         animation: resultPulse 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
     }
-    .result-success div, .result-success h2, .result-success p {
+    .result-success div, .result-success h2, .result-success h1, .result-success p {
         color: #ffffff !important;
     }
     .result-fail {
