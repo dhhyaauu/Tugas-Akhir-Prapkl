@@ -1,10 +1,3 @@
-Siap, paham! Urutan menunya sekarang kita balik sesuai request: **Prediksi (paling depan)** $\rightarrow$ **Tentang Aplikasi** $\rightarrow$ **Analisis Data** $\rightarrow$ **Tentang Saya (paling akhir)**.
-
-Lalu untuk masalah output Jupyter Notebook yang tidak terbaca, itu karena teks aslinya dari file `.ipynb` biasanya mengandung kode warna terminal (ANSI escape codes) atau format HTML mentah yang bentrok dengan *styling* global aplikasi kita. Kode di bawah ini sudah diperbaiki agar output teks dari sel notebook dibungkus dengan komponen `st.text()` atau komponen khusus yang membersihkan *style* liar, sehingga semuanya terbaca dengan jelas dan rapi.
-
-Berikut adalah kode utuh yang sudah diperbarui. Pastikan **jangan ikut menyalin tanda tiga backtick (`````)** di awal dan akhir kode ya saat memasukkannya ke file `app_streamlit.py`:
-
-```python
 # 1. IMPORTS
 
 import os
