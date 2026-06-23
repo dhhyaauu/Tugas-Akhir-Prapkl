@@ -1,5 +1,4 @@
 # 1. IMPORTS
-
 import os
 import json
 import base64
@@ -21,7 +20,7 @@ except ImportError:
     st.error("Install dulu: pip install streamlit-option-menu")
     st.stop()
 
-# Scikit-learn (untuk fallback model jika model.pkl belum ada)
+# Scikit-learn 
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.ensemble import RandomForestClassifier
@@ -39,13 +38,12 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-
-# 3. CUSTOM CSS — TEMA NAVY / PUTIH / ABU / HITAM ELEGAN
+# 3. CUSTOM CSS 
 
 CUSTOM_CSS = """
 <style>
     /* ---------- Import Font ---------- */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+    @import url('[https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap)');
 
     html, body, [class*="css"] {
         font-family: 'Inter', sans-serif;
@@ -266,6 +264,20 @@ CUSTOM_CSS = """
     }
     .fade-in { animation: fadeIn 0.8s ease; }
 
+    /* ---------- Notebook Output Styling Fix ---------- */
+    .notebook-text-output {
+        background-color: #0f172a !important;
+        color: #f8fafc !important;
+        padding: 1rem;
+        border-radius: 8px;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 0.9rem;
+        white-space: pre-wrap;
+        word-break: break-all;
+        margin: 0.5rem 0;
+        box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);
+    }
+
     /* ---------- Footer ---------- */
     .footer {
         text-align: center; padding: 2rem 1rem 1rem;
@@ -286,7 +298,7 @@ DATA_PATH       = "bank-full.csv"
 NOTEBOOK_PATH   = "notebook.ipynb"
 MODEL_PATH      = "model_deposito.joblib"
 PROFILE_IMG     = "assets/fotoprofile.jpeg"
-DATASET_SOURCE  = "https://archive.ics.uci.edu/ml/datasets/Bank+Marketing"
+DATASET_SOURCE  = "[https://archive.ics.uci.edu/ml/datasets/Bank+Marketing](https://archive.ics.uci.edu/ml/datasets/Bank+Marketing)"
 
 
 # 5. UTILITY FUNCTIONS
@@ -336,9 +348,14 @@ def image_to_base64(path: str) -> str | None:
     with open(path, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
+import re
+def clean_ansi_codes(text: str) -> str:
+    """Membersihkan kode warna terminal (ANSI) agar teks terbaca murni."""
+    ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
+    return ansi_escape.sub('', text)
 
 
-# 6. SIDEBAR — PANDUAN PENGGUNAAN (Sudah Diperbaiki & Jelas)
+# 6. SIDEBAR — PANDUAN PENGGUNAAN
 
 with st.sidebar:
     st.markdown("""
@@ -353,10 +370,10 @@ with st.sidebar:
     st.markdown("### 📖 Panduan Penggunaan")
     st.markdown("""
     **Langkah-langkah:**
-    1. Mulai dari **Tentang Aplikasi**
-    2. Lihat analisis data pada halaman **Analisis Data** untuk eksplorasi
-    3. Lakukan prediksi pada halaman **Prediksi**
-    4. Cek profil di **Tentang Saya**
+    1. Mulai dari halaman **Prediksi** untuk melakukan simulasi nasabah
+    2. Pelajari detail program di **Tentang Aplikasi**
+    3. Lihat eksplorasi data mendalam pada **Analisis Data**
+    4. Cek profil pengembang di **Tentang Saya**
     """)
 
     st.markdown("### ✨ Fitur Utama")
@@ -388,13 +405,13 @@ with st.sidebar:
 
 
 
-# 7. NAVBAR HORIZONTAL
+# 7. NAVBAR HORIZONTAL (Urutan Telah Diubah Sesuai Permintaan)
 
 selected = option_menu(
     menu_title=None,
-    options=["Tentang Saya", "Tentang Aplikasi", "Analisis Data", "Prediksi"],
-    icons=["person-circle", "info-circle", "bar-chart-line", "cpu"],
-    default_index=1,
+    options=["Prediksi", "Tentang Aplikasi", "Analisis Data", "Tentang Saya"],
+    icons=["cpu", "info-circle", "bar-chart-line", "person-circle"],
+    default_index=0,
     orientation="horizontal",
     styles={
         "container": {
@@ -593,7 +610,7 @@ def page_tentang_saya():
 
           <div style='margin-top:1.25rem;'>
             <a href='mailto:saffadhiyaa1012@gmail.com' class='social-icon'>✉️</a>
-            <a href='https://github.com/dhhyaauu' target='_blank' class='social-icon'>🐙</a>
+            <a href='[https://github.com/dhhyaauu](https://github.com/dhhyaauu)' target='_blank' class='social-icon'>🐙</a>
             <a href='#' class='social-icon'>📷</a>
           </div>
         </div>
@@ -603,7 +620,7 @@ def page_tentang_saya():
             ("👤", "Nama Lengkap", "Saffa Dhiya Ur Rahma"),
             ("🎓", "Jurusan", "Rekayasa Perangkat Lunak"),
             ("✉️", "Email", "saffadhiyaa1012@gmail.com"),
-            ("🔗", "Github", "github.com/dhhyaauu"),
+            ("🔗", "Github", "[github.com/dhhyaauu](https://github.com/dhhyaauu)"),
             ("💡", "Minat", "Data Science • Machine Learning • Web Dev"),
         ]
 
@@ -919,11 +936,13 @@ def render_tab_notebook():
                         unsafe_allow_html=True)
             st.code(source, language="python")
 
-            # Tampilkan output
+            # Tampilkan output dengan perbaikan pembacaan teks
             for out in cell.get("outputs", []):
                 ot = out.get("output_type")
                 if ot == "stream":
-                    st.text("".join(out.get("text", [])))
+                    raw_text = "".join(out.get("text", []))
+                    clean_text = clean_ansi_codes(raw_text)
+                    st.markdown(f"<div class='notebook-text-output'>{clean_text}</div>", unsafe_allow_html=True)
 
                 elif ot in ("execute_result", "display_data"):
                     data = out.get("data", {})
@@ -933,11 +952,14 @@ def render_tab_notebook():
                         html = "".join(data["text/html"])
                         st.markdown(html, unsafe_allow_html=True)
                     elif "text/plain" in data:
-                        st.text("".join(data["text/plain"]))
+                        raw_text = "".join(data["text/plain"])
+                        clean_text = clean_ansi_codes(raw_text)
+                        st.markdown(f"<div class='notebook-text-output'>{clean_text}</div>", unsafe_allow_html=True)
 
                 elif ot == "error":
-                    st.error("\n".join(out.get("traceback", [])))
-
+                    raw_err = "\n".join(out.get("traceback", []))
+                    clean_err = clean_ansi_codes(raw_err)
+                    st.error(clean_err)
 
 # ---------- TAB ISTILAH ----------
 def render_tab_istilah():
@@ -988,10 +1010,7 @@ def render_tab_istilah():
         </div>
         """, unsafe_allow_html=True)
 
-
-
-
-# 12. ROUTING
+# 12. ROUTING 
 if selected == "Prediksi":
     page_prediksi()
 elif selected == "Tentang Aplikasi":
@@ -1000,8 +1019,6 @@ elif selected == "Analisis Data":
     page_analisis_data()
 elif selected == "Tentang Saya":
     page_tentang_saya()
-
-
 
 
 # 13. FOOTER
