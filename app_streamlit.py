@@ -41,7 +41,7 @@ st.set_page_config(
 )
 
 
-# 3. SIDEBAR INTERAKTIF UNTUK PILIHAN TEMA (EMOJI MINIMALIS)
+# 3. SIDEBAR INTERAKTIF UNTUK PILIHAN TEMA (DENGAN EMOJI MINIMALIS)
 
 with st.sidebar:
     st.markdown("""
@@ -54,20 +54,20 @@ with st.sidebar:
     """, unsafe_allow_html=True)
     
     st.markdown("### 🌓 Tema")
-    theme_choice = st.radio("Pilih Tampilan:", ["☀️ Terang", "🌙 Gelap"], index=0)
+    theme_choice = st.radio("Pilih Tampilan:", ["☀️", "🌙"], index=0)
     st.markdown("<hr style='margin:1rem 0; border-color:#cbd5e1;'/>", unsafe_allow_html=True)
 
 # Menentukan variabel warna berdasarkan tema pilihan user
-if theme_choice == "☀️ Terang":
+if theme_choice == "☀️":
     bg_app = "linear-gradient(135deg, #f7f9fc 0%, #eef2f7 100%)"
     text_main = "#0f172a"
     card_bg = "#ffffff"
     card_border = "rgba(15, 23, 42, 0.05)"
     card_shadow = "rgba(15, 23, 42, 0.06)"
     card_shadow_hover = "rgba(15, 23, 42, 0.12)"
-    label_color = "#0a1f44"      # Teks label biru navy tua di mode terang
-    widget_bg = "#ffffff"        # Latar belakang dalam kotak input putih
-    widget_text = "#0f172a"      # Teks di dalam kotak input gelap
+    label_color = "#0a1f44"   
+    widget_bg = "#ffffff"     
+    widget_text = "#0f172a"   
     plotly_theme = "plotly"
     chart_text_color = "#0f172a"
     chart_bg_color = "#ffffff"
@@ -78,15 +78,15 @@ else:
     card_border = "rgba(255, 255, 255, 0.1)"
     card_shadow = "rgba(0, 0, 0, 0.3)"
     card_shadow_hover = "rgba(0, 0, 0, 0.5)"
-    label_color = "#38bdf8"      # Teks label biru langit menyala cerah di mode gelap
-    widget_bg = "#0f172a"        # Latar belakang dalam kotak input gelap navy
-    widget_text = "#ffffff"      # Teks di dalam kotak input putih bersih
+    label_color = "#38bdf8"   
+    widget_bg = "#0f172a"     
+    widget_text = "#ffffff"   
     plotly_theme = "plotly_dark"
     chart_text_color = "#f8fafc"
     chart_bg_color = "#1e293b"
 
 
-# 4. CUSTOM CSS DENGAN DUKUNGAN TEMA DINAMIS & FIX TOTAL KONTRAS LABEL INPUT
+# 4. CUSTOM CSS DENGAN DUKUNGAN TEMA DINAMIS & FIX KONTRAS LABEL
 
 CUSTOM_CSS = f"""
 <style>
@@ -104,38 +104,26 @@ CUSTOM_CSS = f"""
     }}
 
     /* Force global text color berdasarkan tema aktif */
-    .stMarkdown div p, h1, h2, h3, h4, h5, h6, span {{
+    .stMarkdown div p, h1, h2, h3, h4, h5, h6, span, label {{
         color: {text_main} !important;
     }}
 
-    /* ---------- Perbaikan Total Baca Teks Input & Label ---------- */
-    /* Menargetkan semua label input teks, angka, selectbox, slider, dan form bawaan streamlit */
+    /* ---------- Perbaikan Baca Teks Input & Label ---------- */
     div[data-testid="stWidgetLabel"] p, 
     label, 
     .stSlider p,
-    .stSlider span,
-    div[data-testid="stForm"] label,
-    div[data-testid="stForm"] div p {{
+    div[data-testid="stForm"] label {{
         color: {label_color} !important;
         font-weight: 700 !important;
-        font-size: 0.98rem !important;
-        letter-spacing: 0.4px;
-        margin-bottom: 6px !important;
+        font-size: 0.95rem !important;
+        letter-spacing: 0.3px;
+        margin-bottom: 4px !important;
     }}
     
-    /* Memperbaiki warna teks pilihan dan kotak isian input/selectbox agar kontras tajam */
     div[data-baseweb="input"] input, 
-    div[data-baseweb="select"] div,
-    div[data-baseweb="select"] span {{
+    div[data-baseweb="select"] div {{
         color: {widget_text} !important;
         background-color: {widget_bg} !important;
-        font-weight: 500 !important;
-    }}
-    
-    /* Memperbaiki warna dropdown menu list selectbox saat diklik */
-    div[data-baseweb="menu"] li {{
-        color: {widget_text} !important;
-        background-color: {card_bg} !important;
     }}
 
     /* ---------- Header Gradient ---------- */
@@ -231,6 +219,20 @@ CUSTOM_CSS = f"""
         color: {"#1e3a8a" if theme_choice == "☀️ Terang" else "#38bdf8"} !important; 
         font-weight: 600;
         font-size: 0.95rem; margin-bottom: 1rem;
+    }}
+    
+    .social-icon {{
+        display: inline-flex;
+        width: 46px; height: 46px;
+        align-items: center; justify-content: center;
+        background: #f1f5f9; border-radius: 50%;   
+        margin: 0 0.35rem; text-decoration: none;
+        color: #0a1f44; font-size: 1.2rem;
+        transition: all 0.3s ease;
+    }}
+    .social-icon:hover {{
+        background: #0a1f44; color: white;
+        transform: translateY(-3px);
     }}
 
     /* ---------- Section Title ---------- */
@@ -623,7 +625,7 @@ def page_tentang_aplikasi():
     """, unsafe_allow_html=True)
 
 
-# 12. HALAMAN: ANALISIS DATA (NOTEBOOK UTUH)
+# 12. HALAMAN: ANALISIS DATA (DENGAN RENDER JUPYTER NOTEBOOK LENGKAP)
 
 def page_analisis_data():
     st.markdown("""
@@ -658,6 +660,7 @@ def page_analisis_data():
             with open(NOTEBOOK_PATH, "r", encoding="utf-8") as f:
                 nb = json.load(f)
             
+            # Melakukan perulangan isi sel notebook jupyter
             for i, cell in enumerate(nb.get("cells", []), start=1):
                 ctype = cell.get("cell_type", "")
                 source = "".join(cell.get("source", []))
@@ -669,6 +672,7 @@ def page_analisis_data():
                     st.markdown(f"<div style='color:#64748b; font-size:0.8rem; font-weight:600; margin:1rem 0 0.3rem;'>▶ Cell Code [{i}]</div>", unsafe_allow_html=True)
                     st.code(source, language="python")
 
+                    # Merender output visual/teks dari sel notebook
                     for out in cell.get("outputs", []):
                         ot = out.get("output_type")
                         if ot == "stream":
@@ -705,3 +709,5 @@ st.markdown(f"""
   © 2026, dibuat oleh <b>Saffa Dhiya Ur Rahma</b>
 </div>
 """, unsafe_allow_html=True)
+
+```
