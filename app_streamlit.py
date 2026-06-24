@@ -649,7 +649,7 @@ def page_tentang_saya():
 
          <div style='margin-top:1.25rem;'>
             <a href='mailto:saffadhiyaa1012@gmail.com' class='social-icon'>✉️</a>
-            <a href='[https://github.com/dhhyaauu](https://github.com/dhhyaauu)' target='_blank' class='social-icon'>🐙</a>
+            <a href='https://github.com/dhhyaauu' target='_blank' class='social-icon'>🐙</a>
             <a href='#' class='social-icon'>📷</a>
           </div>
         </div>
@@ -663,7 +663,7 @@ def page_tentang_saya():
         ("👤", "Nama Lengkap", "Saffa Dhiya Ur Rahma"),
         ("🎓", "Jurusan", "Rekayasa Perangkat Lunak"),
         ("✉️", "Email", "saffadhiyaa1012@gmail.com"),
-        ("🔗", "Github", "github.com/dhhyaauu"),
+        ("🔗", "Github", "https://github.com/dhhyaauu"),
         ("💡", "Minat", "Data Science • Machine Learning • Web Dev"),
     ]
 
