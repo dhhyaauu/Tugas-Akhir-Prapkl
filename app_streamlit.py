@@ -124,31 +124,18 @@ CUSTOM_CSS = """
     /* ---------- Profile Card ---------- */
     .profile-card {
         background: white;
-        border-radius: 24px;
+        border-radius: 100px;
         padding: 2.5rem;
         text-align: center;
         box-shadow: 0 20px 60px rgba(10, 31, 68, 0.1);
         transition: all 0.4s ease;
         border: 1px solid rgba(15, 23, 42, 0.05);
+        width: 100px;
+        height: 100px;
     }
     .profile-card:hover {
         transform: translateY(-8px);
         box-shadow: 0 30px 80px rgba(10, 31, 68, 0.18);
-    }
-    
-    /* MODIFIKASI DISINI: profile-img */
-    .profile-img {
-        /* Hapus width/height tetap agar st.image yang kontrol ukuran koloms */
-        /* width: 180px; height: 180px; */ 
-        border-radius: 100%; /* Tetap bulat */
-        object-fit: cover; /* Pastikan gambar menutup area tanpa distorsi */
-        object-position: center; /* Fokuskan gambar di tengah (muka) */
-        border: 6px solid white;
-        box-shadow: 0 10px 30px rgba(10, 31, 68, 0.2);
-        margin-bottom: 1.25rem;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
     }
     
     .profile-name {
@@ -623,7 +610,7 @@ def page_tentang_saya():
 
           <div style='margin-top:1.25rem;'>
             <a href='mailto:saffadhiyaa1012@gmail.com' class='social-icon'>✉️</a>
-            <a href='[https://github.com/dhhyaauu](https://github.com/dhhyaauu)' target='_blank' class='social-icon'>🐙</a>
+            <a href='https://github.com/dhhyaauu' target='_blank' class='social-icon'>🐙</a>
             <a href='#' class='social-icon'>📷</a>
           </div>
         </div>
