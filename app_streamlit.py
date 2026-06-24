@@ -303,6 +303,7 @@ CUSTOM_CSS = """
 """
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
+# 4. KONSTANTA & PATH
 
 DATA_PATH       = "bank-full.csv"
 NOTEBOOK_PATH   = "notebook.ipynb"
@@ -551,60 +552,34 @@ def page_prediksi():
 
         # Gauge chart & Pie Chart
         col1, col2 = st.columns(2)
-with col1:
-    fig = go.Figure(go.Indicator(
-        mode="gauge+number",
-        value=prob_yes,
-        # 1. Mengatur Font untuk Judul Chart
-        title={
-            'text': "Probabilitas YES (%)", 
-            'font': {'size': 18, 'color': '#0a1f44', 'family': 'Arial'}
-        },
-        # 2. Mengatur Font untuk Angka Utama yang Muncul (Value)
-        number={
-            'font': {'size': 36, 'color': '#0a1f44', 'family': 'Arial'},
-            'suffix': "%" # Menambahkan tanda persen di belakang angka utama
-        },
-        gauge={
-            'axis': {
-                'range': [0, 100],
-                # 3. Mengatur Font untuk Angka Penunjuk Skala (0, 20, 40, dst)
-                'tickfont': {'size': 14, 'color': '#0a1f44'}
-            },
-            'bar': {'color': "#1e3a8a"},
-            'steps': [
-                {'range': [0, 40], 'color': "#fee2e2"},
-                {'range': [40, 70], 'color': "#fef3c7"},
-                {'range': [70, 100], 'color': "#d1fae5"},
-            ],
-        }
-    ))
-    
-    # 4. Tambahan wajib: Mengatur background chart agar transparan
-    fig.update_layout(
-        paper_bgcolor='rgba(0,0,0,0)', 
-        plot_bgcolor='rgba(0,0,0,0)',
-        margin=dict(t=40, b=20, l=30, r=30) # Mengatur jarak aman tepi grafik
-    )
-    
-# Kolom Kiri
         with col1:
             fig = go.Figure(go.Indicator(
                 mode="gauge+number",
                 value=prob_yes,
                 title={'text': "Probabilitas YES (%)"},
-                # ... kode gauge lainnya ...
+                gauge={
+                    'axis': {'range': [0, 100]},
+                    'bar': {'color': "#1e3a8a"},
+                    'steps': [
+                        {'range': [0, 40], 'color': "#fee2e2"},
+                        {'range': [40, 70], 'color': "#fef3c7"},
+                        {'range': [70, 100], 'color': "#d1fae5"},
+                    ],
+                }
             ))
+            fig.update_layout(height=320, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
             st.plotly_chart(fig, use_container_width=True)
             
+            # Penjelasan Chart 1
             st.markdown(f"""
             <div class='premium-card' style='margin-top:-20px;'>
                 <b>📌 Penjelasan Gauge Chart:</b><br/>
-                Jarum berada di angka <b>{prob_yes:.1f}%</b>.
+                Grafik di atas menunjukkan tingkat keyakinan model secara linear. 
+                Saat ini jarum berada di angka <b>{prob_yes:.1f}%</b>. 
+                Zonasi warna menunjukkan kategori potensi: Merah (Rendah), Kuning (Sedang), dan Hijau (Tinggi).
             </div>
             """, unsafe_allow_html=True)
 
-        # Kolom Kanan (SEJALUR & SEJAJAR DENGAN WITH COL1)
         with col2:
             fig = px.pie(values=[prob_yes, 100 - prob_yes],
                          names=["Tertarik", "Tidak Tertarik"], hole=0.55,
@@ -612,21 +587,14 @@ with col1:
             fig.update_layout(height=320, paper_bgcolor="white")
             st.plotly_chart(fig, use_container_width=True)
             
+            # Penjelasan Chart 2
             st.markdown(f"""
             <div class='premium-card' style='margin-top:-20px;'>
                 <b>📌 Penjelasan Donut Chart:</b><br/>
-                Membandingkan peluang nasabah Tertarik dan Tidak Tertarik.
+                Grafik lingkaran ini membandingkan proporsi antara peluang nasabah <b>Tertarik (Warna Biru: {prob_yes:.1f}%)</b> 
+                dengan peluang nasabah <b>Tidak Tertarik (Warna Abu-abu: {100-prob_yes:.1f}%)</b> untuk membuka akun deposito berjangka.
             </div>
             """, unsafe_allow_html=True)
-        
-        # Penjelasan Chart 2 (Donut Chart)
-        st.markdown(f"""
-        <div class='premium-card' style='margin-top:-20px;'>
-            <b>📌 Penjelasan Donut Chart:</b><br/>
-            Grafik lingkaran ini membandingkan proporsi antara peluang nasabah <b>Tertarik (Warna Biru: {prob_yes:.1f}%)</b> 
-            dengan peluang nasabah <b>Tidak Tertarik (Warna Abu-abu: {100-prob_yes:.1f}%)</b> untuk membuka akun deposito berjangka.
-        </div>
-        """, unsafe_allow_html=True)
 
         # Interpretasi
         st.markdown("<div class='section-title'>📖 Interpretasi Hasil</div>", unsafe_allow_html=True)
@@ -652,8 +620,8 @@ def page_tentang_saya():
     col1, col2 = st.columns([1, 1.5], gap="large")
 
     with col1:
-        if os.path.exists(SAFFA_PNG):
-            st.image(SAFFA_PNG, width=220)
+        if os.path.exists(PROFILE_IMG):
+            st.image(PROFILE_IMG, width=220)
         else:
             st.warning("Foto profile tidak ditemukan")
 
