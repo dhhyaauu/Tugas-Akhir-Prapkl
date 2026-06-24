@@ -587,24 +587,37 @@ with col1:
         margin=dict(t=40, b=20, l=30, r=30) # Mengatur jarak aman tepi grafik
     )
     
-st.plotly_chart(fig, use_container_width=True)
-            # Penjelasan Chart 1
-            # Penjelasan Chart 1 (Gauge Chart)
-st.markdown(f"""
-        <div class='premium-card' style='margin-top:-20px;'>
-            <b>📌 Penjelasan Gauge Chart:</b><br/>
-            Grafik di atas menunjukkan tingkat keyakinan model secara linear. 
-            Saat ini jarum berada di angka <b>{prob_yes:.1f}%</b>. 
-            Zonasi warna menunjukkan kategori potensi: Merah (Rendah), Kuning (Sedang), dan Hijau (Tinggi).
-        </div>
-        """, unsafe_allow_html=True)
+# Kolom Kiri
+        with col1:
+            fig = go.Figure(go.Indicator(
+                mode="gauge+number",
+                value=prob_yes,
+                title={'text': "Probabilitas YES (%)"},
+                # ... kode gauge lainnya ...
+            ))
+            st.plotly_chart(fig, use_container_width=True)
+            
+            st.markdown(f"""
+            <div class='premium-card' style='margin-top:-20px;'>
+                <b>📌 Penjelasan Gauge Chart:</b><br/>
+                Jarum berada di angka <b>{prob_yes:.1f}%</b>.
+            </div>
+            """, unsafe_allow_html=True)
 
-    with col2:
-        fig = px.pie(values=[prob_yes, 100 - prob_yes],
-                     names=["Tertarik", "Tidak Tertarik"], hole=0.55,
-                     color_discrete_sequence=["#1e3a8a", "#cbd5e1"])
-        fig.update_layout(height=320, paper_bgcolor="white")
-        st.plotly_chart(fig, use_container_width=True)
+        # Kolom Kanan (SEJALUR & SEJAJAR DENGAN WITH COL1)
+        with col2:
+            fig = px.pie(values=[prob_yes, 100 - prob_yes],
+                         names=["Tertarik", "Tidak Tertarik"], hole=0.55,
+                         color_discrete_sequence=["#1e3a8a", "#cbd5e1"])
+            fig.update_layout(height=320, paper_bgcolor="white")
+            st.plotly_chart(fig, use_container_width=True)
+            
+            st.markdown(f"""
+            <div class='premium-card' style='margin-top:-20px;'>
+                <b>📌 Penjelasan Donut Chart:</b><br/>
+                Membandingkan peluang nasabah Tertarik dan Tidak Tertarik.
+            </div>
+            """, unsafe_allow_html=True)
         
         # Penjelasan Chart 2 (Donut Chart)
         st.markdown(f"""
