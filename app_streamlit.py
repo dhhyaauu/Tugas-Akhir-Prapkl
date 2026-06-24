@@ -647,14 +647,14 @@ def page_tentang_saya():
             merancang dashboard analitik yang informatif.
           </p>
 
-          <div style='margin-top:1.5rem; margin-bottom: 0.5rem; display: flex; justify-content: center; gap: 0.5rem;'>
+         <div style='margin-top:1.25rem;'>
             <a href='mailto:saffadhiyaa1012@gmail.com' class='social-icon'>✉️</a>
-            <a href='https://github.com/dhhyaauu' target='_blank' class='social-icon'>🐙</a>
+            <a href='[https://github.com/dhhyaauu](https://github.com/dhhyaauu)' target='_blank' class='social-icon'>🐙</a>
             <a href='#' class='social-icon'>📷</a>
           </div>
         </div>
-    </div>
-    """, unsafe_allow_html=True)
+        """, unsafe_allow_html=True)
+
 
     # 3. Bagian Informasi Detail Pribadi (Ikut rata tengah di bawahnya)
     st.markdown("<div style='max-width: 600px; margin: 2rem auto 0;'><div class='section-title' style='text-align: center; border-left: none; padding-left: 0;'>📋 Informasi Pribadi</div>", unsafe_allow_html=True)
