@@ -171,19 +171,6 @@ CUSTOM_CSS = """
         background: #0a1f44; color: white;
         transform: translateY(-3px);
     }
-    .profile-img {
-        width: 200px !important;       /* Atur lebar lingkaran foto di sini */
-        height: 200px !important;      /* Atur tinggi lingkaran foto di sini (harus sama dengan width) */
-        border-radius: 100% !important; /* Membuat bentuk lingkaran sempurna */
-        object-fit: cover !important;  /* Memastikan muka penuh terpotong rapi di dalam lingkaran */
-        object-position: center !important; /* Memfokuskan potongan gambar di tengah muka */
-        border: 6px solid white;
-        box-shadow: 0 10px 30px rgba(10, 31, 68, 0.2);
-        margin-bottom: 1.25rem;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-    }
 
     /* ---------- Section Title ---------- */
     .section-title {
@@ -629,19 +616,24 @@ def page_tentang_saya():
     </div>
     """, unsafe_allow_html=True)
 
-    col1, col2 = st.columns([1, 1.5], gap="large")
+    # Menggunakan container utama (tanpa pembagian kolom kiri-kanan)
+    # Agar semua elemen profile card, foto, nama, dan info berada di tengah
+    st.markdown("""
+    <div style='display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; margin-bottom: 2rem;'>
+    """, unsafe_allow_html=True)
 
-    with col1:
-        if os.path.exists(PROFILE_IMG):
-            st.image(PROFILE_IMG, width=220)
-        else:
-            st.warning("Foto profile tidak ditemukan")
+    # 1. Bagian Foto (Ditampilkan di paling atas dan di tengah)
+    if os.path.exists(PROFILE_IMG):
+        # Menggunakan st.columns tipis di kiri-kanan hanya untuk memposisikan st.image bawaan streamlit tepat di tengah
+        _, center_col, _ = st.columns([1, 1.5, 1])
+        with center_col:
+            st.image(PROFILE_IMG, use_container_width=True)
+    else:
+        st.warning("Foto profile tidak ditemukan")
 
-    with col2:
-        st.markdown("<div class='section-title'>📋 Informasi Pribadi</div>", unsafe_allow_html=True)
-
-        st.markdown("""
-        <div class='profile-card'>
+    # 2. Bagian Nama, Role, dan Sosmed (Tepat di bawah foto & rata tengah)
+    st.markdown("""
+        <div class='profile-card' style='max-width: 600px; width: 100%; margin: 0 auto; text-align: center;'>
           <div class='profile-name'>Saffa Dhiya Ur Rahma</div>
           <div class='profile-role'>Rekayasa Perangkat Lunak</div>
           <p style='color:#64748b; font-size:0.95rem; line-height:1.6;'>
@@ -650,40 +642,46 @@ def page_tentang_saya():
             merancang dashboard analitik yang informatif.
           </p>
 
-          <div style='margin-top:1.25rem;'>
+          <div style='margin-top:1.25rem; margin-bottom: 1.5rem;'>
             <a href='mailto:saffadhiyaa1012@gmail.com' class='social-icon'>✉️</a>
             <a href='https://github.com/dhhyaauu' target='_blank' class='social-icon'>🐙</a>
             <a href='#' class='social-icon'>📷</a>
           </div>
         </div>
-        """, unsafe_allow_html=True)
+    </div>
+    """, unsafe_allow_html=True)
 
-        info_items = [
-            ("👤", "Nama Lengkap", "Saffa Dhiya Ur Rahma"),
-            ("🎓", "Jurusan", "Rekayasa Perangkat Lunak"),
-            ("✉️", "Email", "saffadhiyaa1012@gmail.com"),
-            ("🔗", "Github", "[github.com/dhhyaauu](https://github.com/dhhyaauu)"),
-            ("💡", "Minat", "Data Science • Machine Learning • Web Dev"),
-        ]
+    # 3. Bagian Informasi Detail Pribadi (Ikut rata tengah di bawahnya)
+    st.markdown("<div style='max-width: 600px; margin: 0 auto;'><div class='section-title' style='text-align: center; border-left: none; padding-left: 0;'>📋 Informasi Pribadi</div>", unsafe_allow_html=True)
 
-        for icon, label, val in info_items:
-            st.markdown(f"""
-            <div class='premium-card' style='display:flex;align-items:center;gap:1rem;padding:1.2rem 1.5rem;'>
-              <div style='font-size:1.6rem;width:48px;height:48px;background:#eef2f7;
-                          border-radius:12px;display:flex;align-items:center;justify-content:center;'>
-                {icon}
-              </div>
-              <div>
-                <div style='color:#64748b;font-size:0.78rem;text-transform:uppercase;
-                            letter-spacing:0.5px;font-weight:600;'>
-                    {label}
-                </div>
-                <div style='color:#0a1f44;font-weight:600;font-size:1rem;'>
-                    {val}
-                </div>
-              </div>
+    info_items = [
+        ("👤", "Nama Lengkap", "Saffa Dhiya Ur Rahma"),
+        ("🎓", "Jurusan", "Rekayasa Perangkat Lunak"),
+        ("✉️", "Email", "saffadhiyaa1012@gmail.com"),
+        ("🔗", "Github", "github.com/dhhyaauu"),
+        ("💡", "Minat", "Data Science • Machine Learning • Web Dev"),
+    ]
+
+    for icon, label, val in info_items:
+        st.markdown(f"""
+        <div class='premium-card' style='display:flex; align-items:center; gap:1rem; padding:1.2rem 1.5rem; max-width: 600px; margin: 0 auto 1rem;'>
+          <div style='font-size:1.6rem; width:48px; height:48px; background:#eef2f7;
+                      border-radius:12px; display:flex; align-items:center; justify-content:center;'>
+            {icon}
+          </div>
+          <div style='text-align: left;'>
+            <div style='color:#64748b; font-size:0.78rem; text-transform:uppercase;
+                        letter-spacing:0.5px; font-weight:600;'>
+                {label}
             </div>
-            """, unsafe_allow_html=True)
+            <div style='color:#0a1f44; font-weight:600; font-size:1rem;'>
+                {val}
+            </div>
+          </div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.markdown("</div>", unsafe_allow_html=True)
 
 
 # 9. HALAMAN: TENTANG APLIKASI
