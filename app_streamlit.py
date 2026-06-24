@@ -650,7 +650,7 @@ def page_tentang_saya():
             ("👤", "Nama Lengkap", "Saffa Dhiya Ur Rahma"),
             ("🎓", "Jurusan", "Rekayasa Perangkat Lunak"),
             ("✉️", "Email", "saffadhiyaa1012@gmail.com"),
-            ("🔗", "Github", "[github.com/dhhyaauu](https://github.com/dhhyaauu)"),
+            ("🔗", "Github", "https://github.com/dhhyaauu"),
             ("💡", "Minat", "Data Science • Machine Learning • Web Dev"),
         ]
 
