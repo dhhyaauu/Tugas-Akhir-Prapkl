@@ -134,7 +134,7 @@ CUSTOM_CSS = """
     /* ---------- Profile Card ---------- */
     .profile-card {
         background: white;
-        border-radius: 24px;
+        border-radius: 100px;
         padding: 2.5rem;
         text-align: center;
         box-shadow: 0 20px 60px rgba(10, 31, 68, 0.1);
