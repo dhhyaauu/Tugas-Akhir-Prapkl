@@ -124,20 +124,25 @@ CUSTOM_CSS = """
     /* ---------- Profile Card ---------- */
     .profile-card {
         background: white;
-        border-radius: 100px;
+        border-radius: 24px;
         padding: 2.5rem;
         text-align: center;
         box-shadow: 0 20px 60px rgba(10, 31, 68, 0.1);
         transition: all 0.4s ease;
         border: 1px solid rgba(15, 23, 42, 0.05);
-        width: 100px;
-        height: 100px;
     }
     .profile-card:hover {
         transform: translateY(-8px);
         box-shadow: 0 30px 80px rgba(10, 31, 68, 0.18);
     }
-    
+    .profile-img {
+        width: 180px; height: 180px;
+        border-radius: 100%;
+        object-fit: cover;
+        border: 6px solid white;
+        box-shadow: 0 10px 30px rgba(10, 31, 68, 0.2);
+        margin-bottom: 1.25rem;
+    }
     .profile-name {
         font-family: 'Plus Jakarta Sans', sans-serif;
         font-size: 1.75rem; font-weight: 800;
@@ -584,14 +589,12 @@ def page_tentang_saya():
     </div>
     """, unsafe_allow_html=True)
 
-    # MODIFIKASI DISINI: Rasio kolom diubah agar kolom foto lebih besar [1.5, 1]
-    col1, col2 = st.columns([1.5, 1], gap="large")
+    col1, col2 = st.columns([1, 1.5], gap="large")
 
     with col1:
         if os.path.exists(PROFILE_IMG):
-            # MODIFIKASI DISINI: st.image dibesarkan (width dihapus agar ikuti kolom)
-            # st.image(PROFILE_IMG, width=220)
-            st.image(PROFILE_IMG, use_container_width=True)
+            st.image(PROFILE_IMG, width=200)
+            border-radius: 100px;
         else:
             st.warning("Foto profile tidak ditemukan")
 
@@ -610,7 +613,7 @@ def page_tentang_saya():
 
           <div style='margin-top:1.25rem;'>
             <a href='mailto:saffadhiyaa1012@gmail.com' class='social-icon'>✉️</a>
-            <a href='https://github.com/dhhyaauu' target='_blank' class='social-icon'>🐙</a>
+            <a href='[https://github.com/dhhyaauu](https://github.com/dhhyaauu)' target='_blank' class='social-icon'>🐙</a>
             <a href='#' class='social-icon'>📷</a>
           </div>
         </div>
