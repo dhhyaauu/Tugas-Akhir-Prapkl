@@ -145,6 +145,17 @@ CUSTOM_CSS = """
         transform: translateY(-8px);
         box-shadow: 0 30px 80px rgba(10, 31, 68, 0.18);
     }
+    .profile-img { 
+        border-radius: 100%; 
+        object-fit: cover; 
+        object-position: center; 
+        border: 6px solid white;
+        box-shadow: 0 10px 30px rgba(10, 31, 68, 0.2);
+        margin-bottom: 1.25rem;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
     .profile-name {
         font-family: 'Plus Jakarta Sans', sans-serif;
         font-size: 1.75rem; font-weight: 800;
