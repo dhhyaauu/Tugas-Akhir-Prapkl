@@ -587,10 +587,10 @@ with col1:
         margin=dict(t=40, b=20, l=30, r=30) # Mengatur jarak aman tepi grafik
     )
     
-    st.plotly_chart(fig, use_container_width=True)
+st.plotly_chart(fig, use_container_width=True)
             # Penjelasan Chart 1
             # Penjelasan Chart 1 (Gauge Chart)
-        st.markdown(f"""
+st.markdown(f"""
         <div class='premium-card' style='margin-top:-20px;'>
             <b>📌 Penjelasan Gauge Chart:</b><br/>
             Grafik di atas menunjukkan tingkat keyakinan model secara linear. 
