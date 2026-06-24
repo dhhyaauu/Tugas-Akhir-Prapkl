@@ -171,10 +171,18 @@ CUSTOM_CSS = """
         background: #0a1f44; color: white;
         transform: translateY(-3px);
     }
-    .profile-image {
-    width: 150px;
-    height: 150px;
-    border-radius: 100px;
+    .profile-img {
+        width: 200px !important;       /* Atur lebar lingkaran foto di sini */
+        height: 200px !important;      /* Atur tinggi lingkaran foto di sini (harus sama dengan width) */
+        border-radius: 100% !important; /* Membuat bentuk lingkaran sempurna */
+        object-fit: cover !important;  /* Memastikan muka penuh terpotong rapi di dalam lingkaran */
+        object-position: center !important; /* Memfokuskan potongan gambar di tengah muka */
+        border: 6px solid white;
+        box-shadow: 0 10px 30px rgba(10, 31, 68, 0.2);
+        margin-bottom: 1.25rem;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     /* ---------- Section Title ---------- */
