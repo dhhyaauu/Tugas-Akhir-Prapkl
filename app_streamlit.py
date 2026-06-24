@@ -137,7 +137,7 @@ CUSTOM_CSS = """
     }
     .profile-img {
         width: 180px; height: 180px;
-        border-radius: 100%;
+        border-radius: 200%;
         object-fit: cover;
         border: 6px solid white;
         box-shadow: 0 10px 30px rgba(10, 31, 68, 0.2);
@@ -594,7 +594,6 @@ def page_tentang_saya():
     with col1:
         if os.path.exists(PROFILE_IMG):
             st.image(PROFILE_IMG, width=200)
-            border-radius: 100px;
         else:
             st.warning("Foto profile tidak ditemukan")
 
