@@ -171,6 +171,11 @@ CUSTOM_CSS = """
         background: #0a1f44; color: white;
         transform: translateY(-3px);
     }
+    .profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 100px;
+    }
 
     /* ---------- Section Title ---------- */
     .section-title {
