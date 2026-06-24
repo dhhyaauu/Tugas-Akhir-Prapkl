@@ -589,30 +589,31 @@ with col1:
     
     st.plotly_chart(fig, use_container_width=True)
             # Penjelasan Chart 1
-            st.markdown(f"""
-            <div class='premium-card' style='margin-top:-20px;'>
-                <b>📌 Penjelasan Gauge Chart:</b><br/>
-                Grafik di atas menunjukkan tingkat keyakinan model secara linear. 
-                Saat ini jarum berada di angka <b>{prob_yes:.1f}%</b>. 
-                Zonasi warna menunjukkan kategori potensi: Merah (Rendah), Kuning (Sedang), dan Hijau (Tinggi).
-            </div>
-            """, unsafe_allow_html=True)
+            # Penjelasan Chart 1 (Gauge Chart)
+        st.markdown(f"""
+        <div class='premium-card' style='margin-top:-20px;'>
+            <b>📌 Penjelasan Gauge Chart:</b><br/>
+            Grafik di atas menunjukkan tingkat keyakinan model secara linear. 
+            Saat ini jarum berada di angka <b>{prob_yes:.1f}%</b>. 
+            Zonasi warna menunjukkan kategori potensi: Merah (Rendah), Kuning (Sedang), dan Hijau (Tinggi).
+        </div>
+        """, unsafe_allow_html=True)
 
-        with col2:
-            fig = px.pie(values=[prob_yes, 100 - prob_yes],
-                         names=["Tertarik", "Tidak Tertarik"], hole=0.55,
-                         color_discrete_sequence=["#1e3a8a", "#cbd5e1"])
-            fig.update_layout(height=320, paper_bgcolor="white")
-            st.plotly_chart(fig, use_container_width=True)
-            
-            # Penjelasan Chart 2
-            st.markdown(f"""
-            <div class='premium-card' style='margin-top:-20px;'>
-                <b>📌 Penjelasan Donut Chart:</b><br/>
-                Grafik lingkaran ini membandingkan proporsi antara peluang nasabah <b>Tertarik (Warna Biru: {prob_yes:.1f}%)</b> 
-                dengan peluang nasabah <b>Tidak Tertarik (Warna Abu-abu: {100-prob_yes:.1f}%)</b> untuk membuka akun deposito berjangka.
-            </div>
-            """, unsafe_allow_html=True)
+    with col2:
+        fig = px.pie(values=[prob_yes, 100 - prob_yes],
+                     names=["Tertarik", "Tidak Tertarik"], hole=0.55,
+                     color_discrete_sequence=["#1e3a8a", "#cbd5e1"])
+        fig.update_layout(height=320, paper_bgcolor="white")
+        st.plotly_chart(fig, use_container_width=True)
+        
+        # Penjelasan Chart 2 (Donut Chart)
+        st.markdown(f"""
+        <div class='premium-card' style='margin-top:-20px;'>
+            <b>📌 Penjelasan Donut Chart:</b><br/>
+            Grafik lingkaran ini membandingkan proporsi antara peluang nasabah <b>Tertarik (Warna Biru: {prob_yes:.1f}%)</b> 
+            dengan peluang nasabah <b>Tidak Tertarik (Warna Abu-abu: {100-prob_yes:.1f}%)</b> untuk membuka akun deposito berjangka.
+        </div>
+        """, unsafe_allow_html=True)
 
         # Interpretasi
         st.markdown("<div class='section-title'>📖 Interpretasi Hasil</div>", unsafe_allow_html=True)
